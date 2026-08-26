@@ -1,0 +1,80 @@
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const path = require("path");
+const classRoutes = require("./routes/classRoutes");
+const sessionRoutes = require("./routes/sessionRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+
+dotenv.config();
+
+const app = express();
+
+
+const PORT = process.env.PORT || 5000;
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.use("/api/classes", classRoutes);
+app.use("/api/sessions", sessionRoutes);
+app.use("/api/bookings", bookingRoutes);
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    message: "Yoga backend is running",
+  });
+});
+
+const { sendEmail } = require("./services/emailService");
+
+// app.get("/api/test-email", async (req, res) => {
+//   const result = await sendEmail({
+//     to: process.env.TRAINER_EMAIL,
+//     subject: "YogaPT Test Email",
+//     html: `
+//       <h1>YogaPT Email Test</h1>
+//       <p>Resend is successfully connected.</p>
+//       <p>This is a test email from the YogaPT backend.</p>
+//     `,
+//   });
+
+//   res.json(result);
+// });
+
+// 404 endpoint
+app.use((req, res) => {
+ res.sendFile(path.join(__dirname, "public", "404.html"));
+});
+
+const startServer = async () => {
+  try {
+    console.log("Connecting to MongoDB...");
+
+    await connectDB();
+
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("\n❌ Backend startup failed");
+    console.error("Reason:", error.message);
+    
+  }
+};
+
+startServer();

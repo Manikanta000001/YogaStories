@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | YogaStoriesWithLeena</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-16px) rotate(-2deg) scale(1.02); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.75; transform: scale(1.1); }
+        }
+
+        @keyframes dataFlow {
+            0% { stroke-dashoffset: 100; opacity: 0.2; }
+            50% { opacity: 1; filter: drop-shadow(0 0 6px #ef4444); }
+            100% { stroke-dashoffset: 0; opacity: 0.2; }
+        }
+
+        @keyframes ledBlinkFast {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px #ef4444); }
+            50% { opacity: 0.15; filter: drop-shadow(0 0 2px #ef4444); }
+        }
+
+        @keyframes glitchPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.08); opacity: 1; color: #f87171; text-shadow: 0 0 20px rgba(239, 68, 68, 0.9); }
+        }
+
+        @keyframes radarSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0px) translateX(0px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-60px) translateX(25px); opacity: 0; }
+        }
+
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-float {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+
+        .animate-glow {
+            animation: pulseGlow 3.5s ease-in-out infinite;
+        }
+
+        .animate-data-flow {
+            stroke-dasharray: 12;
+            animation: dataFlow 1.2s linear infinite;
+        }
+
+        .animate-glitch {
+            animation: glitchPulse 1.8s ease-in-out infinite;
+        }
+
+        .animate-radar {
+            animation: radarSpin 4s linear infinite;
+            transform-origin: center;
+        }
+
+        .led-red {
+            background-color: #ef4444;
+            box-shadow: 0 0 14px #ef4444, 0 0 28px #ef4444;
+            animation: ledBlinkFast 0.6s infinite;
+        }
+
+        .led-blue {
+            background-color: #0284c7;
+            box-shadow: 0 0 10px #0284c7;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(239, 68, 68, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatParticle 3s ease-in-out infinite;
+        }
+
+        .entrance-1 {
+            animation: fadeInSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .entrance-2 {
+            animation: fadeInSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+            opacity: 0;
+        }
+        .entrance-3 {
+            animation: fadeInSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+            opacity: 0;
+        }
+        .entrance-server {
+            animation: fadeInScale 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950 text-slate-900 dark:text-slate-100 h-full flex flex-col justify-between selection:bg-blue-600 selection:text-white transition-colors duration-300">
+
+    <!-- Theme Toggle Switch (Top Right) -->
+    <div class="absolute top-6 right-6 z-30">
+        <button id="themeToggle" class="flex items-center space-x-2 px-3.5 py-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-blue-100 dark:border-slate-700 shadow-sm transition hover:scale-105 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer" aria-label="Toggle Dark/Light Mode">
+            <!-- Sun Icon (shown in dark mode) -->
+            <svg id="sunIcon" class="w-4 h-4 text-amber-400 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <!-- Moon Icon (shown in light mode) -->
+            <svg id="moonIcon" class="w-4 h-4 text-blue-600 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            <span id="themeText" class="hidden sm:inline">Theme</span>
+        </button>
+    </div>
+
+    <!-- Ambient Background Gradients & Glow Blobs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-40 -left-40 w-[500px] h-[500px] bg-red-400/10 dark:bg-red-600/15 rounded-full blur-[140px] animate-glow"></div>
+        <div class="absolute top-1/3 right-[-10%] w-[600px] h-[600px] bg-blue-400/15 dark:bg-blue-600/10 rounded-full blur-[160px] animate-glow" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-10 left-1/4 w-[450px] h-[450px] bg-indigo-300/15 dark:bg-sky-500/10 rounded-full blur-[140px]"></div>
+    </div>
+
+    <!-- Main Hero Section -->
+    <main class="relative z-10 flex-grow flex items-center px-6 sm:px-12 lg:px-20 py-12 lg:py-0">
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            
+            <!-- Left Content Column -->
+            <div class="lg:col-span-7 flex flex-col items-start space-y-6">
+                
+                <!-- Status Badge -->
+                <div class="entrance-1 inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-red-200 dark:border-red-900/50 shadow-sm">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <span class="text-xs sm:text-sm font-semibold tracking-wider text-red-600 dark:text-red-400 uppercase">Error 404 • Route Not Found</span>
+                </div>
+
+                <!-- Heading -->
+                <div class="entrance-2 space-y-2">
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        YogaStoriesWith<span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-500 dark:from-red-400 dark:via-rose-400 dark:to-amber-400">Leena</span>
+                    </h1>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-700 dark:text-slate-300 tracking-tight">
+                        Requested endpoint does not exist
+                    </h2>
+                </div>
+
+                <!-- Description -->
+                <p class="entrance-3 max-w-xl text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
+                    The API route or page you are trying to reach could not be found on the YogaStoriesWithLeena server. Please verify the URL or return to the base status dashboard.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="entrance-3 pt-2 flex flex-wrap gap-4">
+                    <a href="/" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        Back to Server Status
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Right Server Illustration Column with Enhanced Animations -->
+            <div class="entrance-server lg:col-span-5 flex justify-center items-center relative">
+                <div class="relative w-full max-w-md aspect-square flex items-center justify-center">
+                    
+                    <!-- Glow Behind Server -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-red-400/25 to-amber-300/20 dark:from-red-600/35 dark:to-rose-500/20 rounded-full blur-3xl animate-pulse"></div>
+
+                    <!-- Dynamic floating particles around rack -->
+                    <div class="particle w-2.5 h-2.5" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+                    <div class="particle w-2 h-2" style="top: 70%; left: 85%; animation-delay: 1.2s;"></div>
+                    <div class="particle w-3 h-3" style="top: 85%; left: 25%; animation-delay: 0.5s;"></div>
+                    <div class="particle w-1.5 h-1.5" style="top: 15%; left: 80%; animation-delay: 2s;"></div>
+
+                    <!-- Isometric Server Rack SVG Illustration -->
+                    <div class="relative z-10 w-full animate-float drop-shadow-2xl">
+                        <svg viewBox="0 0 400 450" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                            <!-- Base Platform Shadow -->
+                            <ellipse cx="200" cy="410" rx="140" ry="25" fill="#0f172a" class="dark:fill-black" fill-opacity="0.12"/>
+
+                            <!-- Server Rack Tower Main Body -->
+                            <rect x="90" y="60" width="220" height="320" rx="16" fill="url(#rackGradient)" stroke="rgba(239, 68, 68, 0.35)" stroke-width="2"/>
+
+                            <!-- Rack Front Door Frame / Glass Panel -->
+                            <rect x="102" y="72" width="196" height="296" rx="10" fill="#f8fafc" class="dark:fill-slate-900" fill-opacity="0.9" stroke="rgba(239, 68, 68, 0.2)" stroke-width="1"/>
+
+                            <!-- Module 1: Core Engine (Fault LED) -->
+                            <g transform="translate(114, 90)">
+                                <rect width="172" height="60" rx="8" fill="#ffffff" class="dark:fill-slate-800" stroke="rgba(239, 68, 68, 0.4)" stroke-width="1.5"/>
+                                <!-- LED Lights (Red alert for 404) -->
+                                <circle cx="20" cy="30" r="4" class="led-red"/>
+                                <circle cx="34" cy="30" r="3" class="led-blue"/>
+                                <!-- Drive Slots -->
+                                <rect x="70" y="20" width="12" height="20" rx="3" fill="#e2e8f0" class="dark:fill-slate-700"/>
+                                <rect x="90" y="20" width="12" height="20" rx="3" fill="#e2e8f0" class="dark:fill-slate-700"/>
+                                <rect x="110" y="20" width="12" height="20" rx="3" fill="#e2e8f0" class="dark:fill-slate-700"/>
+                                <rect x="130" y="20" width="24" height="20" rx="3" fill="#fee2e2" class="dark:bg-red-950"/>
+                                <text x="142" y="34" fill="#ef4444" font-family="'Inter', sans-serif" font-size="10" font-weight="700" text-anchor="middle" class="animate-glitch">404</text>
+                            </g>
+
+                            <!-- Module 2: Routing Table -->
+                            <g transform="translate(114, 166)">
+                                <rect width="172" height="60" rx="8" fill="#ffffff" class="dark:fill-slate-800" stroke="rgba(59, 130, 246, 0.25)" stroke-width="1.5"/>
+                                <!-- LED Lights -->
+                                <circle cx="20" cy="30" r="4" class="led-blue"/>
+                                <circle cx="34" cy="30" r="3" class="led-blue"/>
+                                <!-- Storage Bars -->
+                                <rect x="70" y="16" width="82" height="6" rx="2" fill="#e2e8f0" class="dark:fill-slate-700"/>
+                                <rect x="70" y="27" width="82" height="6" rx="2" fill="#e2e8f0" class="dark:fill-slate-700"/>
+                                <rect x="70" y="38" width="40" height="6" rx="2" fill="#ef4444" fill-opacity="0.85"/>
+                            </g>
+
+                            <!-- Module 3: Gateway Disconnected with Animated Waveform -->
+                            <g transform="translate(114, 242)">
+                                <rect width="172" height="60" rx="8" fill="#ffffff" class="dark:fill-slate-800" stroke="rgba(239, 68, 68, 0.35)" stroke-width="1.5"/>
+                                <!-- LED Lights -->
+                                <circle cx="20" cy="30" r="4" class="led-red" style="animation-delay: 0.4s;"/>
+                                <circle cx="34" cy="30" r="3" class="led-blue"/>
+                                <!-- Disconnected Waveform with Flow -->
+                                <path d="M 70 30 Q 95 15 120 30 T 152 30" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round" class="animate-data-flow"/>
+                            </g>
+
+                            <!-- Server Status Brand Tag at Bottom of Rack -->
+                            <rect x="135" y="322" width="130" height="24" rx="6" fill="#f1f5f9" class="dark:fill-slate-800" stroke="rgba(239, 68, 68, 0.25)" stroke-width="1"/>
+                            <text x="200" y="337" fill="#ef4444" font-family="'Inter', sans-serif" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1">ROUTE NOT FOUND</text>
+
+                            <!-- Floating Glitch Particles around Rack -->
+                            <circle cx="65" cy="140" r="4" fill="#ef4444" class="animate-ping"/>
+                            <circle cx="335" cy="220" r="5" fill="#f59e0b" class="animate-pulse" style="animation-delay: 0.8s;"/>
+                            <circle cx="80" cy="290" r="3" fill="#ef4444" class="animate-pulse" style="animation-delay: 0.4s;"/>
+
+                            <!-- Gradients Definition -->
+                            <defs>
+                                <linearGradient id="rackGradient" x1="90" y1="60" x2="310" y2="380" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#ffffff" class="dark:stop-color-slate-900" stop-opacity="0.95"/>
+                                    <stop offset="100%" stop-color="#fff5f5" class="dark:stop-color-slate-950" stop-opacity="0.95"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Wave Section Divider -->
+    <div class="relative w-full overflow-hidden leading-none z-20 pointer-events-none">
+        <svg class="relative block w-full h-16 sm:h-24 lg:h-32 text-white dark:text-slate-900 transition-colors duration-300" viewBox="0 0 1200 120" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,0 C150,90 350,-40 500,50 C650,140 900,10 1200,40 L1200,120 L0,120 Z"></path>
+        </svg>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="relative z-20 w-full bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 pt-6 pb-12 px-6 sm:px-12 border-t border-red-100 dark:border-slate-800 shadow-[0_-10px_30px_rgba(239,68,68,0.05)] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-slate-800 border border-red-100 dark:border-slate-700 flex items-center justify-center text-red-600 dark:text-red-400 font-bold shadow-sm">
+                    ॐ
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white tracking-tight text-lg">YogaStoriesWithLeena</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Backend Microservice Infrastructure</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6 text-sm text-slate-600 dark:text-slate-300 font-medium">
+                <span class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    HTTP 404 Response
+                </span>
+                <span class="hidden sm:inline text-slate-300 dark:text-slate-700">|</span>
+                <span class="text-slate-500 dark:text-slate-400">Endpoint handler not registered</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+
+</body>
+</html>

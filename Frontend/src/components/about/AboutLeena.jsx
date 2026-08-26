@@ -1,4 +1,7 @@
-    function AboutLeena() {
+  import image from "../../../public/images/images.jpeg"
+  import leena from "../../../public/images/leena.jpeg"
+
+  function AboutLeena() {
       return (
         <section id="about" className="py-28 px-6 relative max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -10,7 +13,7 @@
 
               <div className="w-[300px] h-[380px] sm:w-[380px] sm:h-[480px] mask-arch-shape overflow-hidden shadow-2xl border-2 border-[var(--border-color)] bg-[var(--card-bg)]">
                 <img 
-                  src="leena.jpeg" 
+                  src={leena}
                   alt="Leena Sajja Yoga Pose" 
                   className="w-full h-full object-cover"
                 />
@@ -30,7 +33,7 @@
               {/* Floating Badge 2 */}
               <div className="absolute -bottom-6 -right-2 sm:right-4 p-4 rounded-full bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--border-color)] shadow-xl flex items-center gap-3 animate-float" style={{ animationDelay: '2s' }}>
                 <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center font-bold text-xs">
-                <img src="images.jpeg" className="object-fit rounded-full" alt=""/>
+                <img src={image} className="object-fit rounded-full" alt=""/>
                 </div>
                 <div className="text-xs font-semibold">
                   <p className="text-[var(--accent-sage)]">OFFICIAL TRAINER</p>

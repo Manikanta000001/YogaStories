@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -31,16 +31,35 @@ import ContactAndFooter from "./components/contact/ContactAndFooter";
 import BreathingModal from "./components/modals/BreathingModal";
 import BookingModal from "./components/modals/BookingModal";
 
-import Dashboard from "./pages/admin/Dashboard";
-import Bookings from "./pages/admin/Bookings";
-import SessionPage from "./pages/admin/Sessions";
-import Classes from "./pages/admin/Classes";
-import Announcements from "./pages/admin/Announcements";
-import Clients from "./pages/admin/Clients";
-import Analytics from "./pages/admin/Analytics";
-import Settings from "./pages/admin/Settings";
+// import Dashboard from "./pages/admin/Dashboard";
+// import Bookings from "./pages/admin/Bookings";
+// import SessionPage from "./pages/admin/Sessions";
+// import Classes from "./pages/admin/Classes";
+// import Announcements from "./pages/admin/Announcements";
+// import Clients from "./pages/admin/Clients";
+// import Analytics from "./pages/admin/Analytics";
+// import Settings from "./pages/admin/Settings";
+
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const Bookings = lazy(() => import("./pages/admin/Bookings"));
+const SessionPage = lazy(() => import("./pages/admin/Sessions"));
+const Classes = lazy(() => import("./pages/admin/Classes"));
+const Announcements = lazy(() => import("./pages/admin/Announcements"));
+const Clients = lazy(() => import("./pages/admin/Clients"));
+const Analytics = lazy(() => import("./pages/admin/Analytics"));
+const Settings = lazy(() => import("./pages/admin/Settings"));
+
 import RazorpayTest from "./components/payment/RazorpayTest";
+import { PageLoader } from "./components/common/PageLoader";
 // import CashfreeTest from "./components/payment/CashfreeTest";
+
+const initialTheme =
+  localStorage.getItem("energy_theme") ||
+  (window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light");
+
+document.documentElement.setAttribute("data-theme", initialTheme);
 
 function PublicSite() {
   const [theme, setTheme] = useState("light");
@@ -227,29 +246,86 @@ function PublicSite() {
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Public Website */}
-        <Route path="/" element={<PublicSite />} />
+    <Routes>
+  {/* Public Website */}
+  <Route path="/" element={<PublicSite />} />
 
-        {/* Admin Dashboard */}
-        <Route path="/admin" element={<Dashboard />} />
-        <Route path="/bookings" element={<Bookings />} />
+  {/* Admin Dashboard */}
+  <Route
+    path="/admin"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Dashboard />
+      </Suspense>
+    }
+  />
 
-        <Route path="/sessions" element={<SessionPage />} />
-        <Route path="/classes" element={<Classes />} />
-        <Route path="/announcements" element={<Announcements />} />
-        <Route path="/clients" element={<Clients />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/payment" element={<RazorpayTest />} />
-        {/* <Route
-          path="/cashfree"
-          element={
-           
-             <CashfreeTest/>
-          }
-        /> */}
-      </Routes>
+  <Route
+    path="/bookings"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Bookings />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/sessions"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <SessionPage />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/classes"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Classes />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/announcements"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Announcements />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/clients"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Clients />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/analytics"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Analytics />
+      </Suspense>
+    }
+  />
+
+  <Route
+    path="/settings"
+    element={
+      <Suspense fallback={<PageLoader/>}>
+        <Settings />
+      </Suspense>
+    }
+  />
+
+  <Route path="/payment" element={<RazorpayTest />} />
+  <Route path="/loader" element={<PageLoader/>} />
+</Routes>
     </BrowserRouter>
   );
 }

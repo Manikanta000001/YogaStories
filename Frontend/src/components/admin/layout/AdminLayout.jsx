@@ -3,10 +3,12 @@ import { useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
 
-const AdminLayout = ({ children,activities = []  }) => {
+const AdminLayout = ({ children, activities = [] }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem("energy_theme") === "dark";
+  });
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   const toggleCollapse = () => {
@@ -22,7 +24,13 @@ const AdminLayout = ({ children,activities = []  }) => {
   };
 
   const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
+    setIsDarkMode((prev) => {
+      const next = !prev;
+
+      localStorage.setItem("energy_theme", next ? "dark" : "light");
+
+      return next;
+    });
   };
 
   const toggleNotifications = () => {
@@ -52,19 +60,17 @@ const AdminLayout = ({ children,activities = []  }) => {
         />
 
         <div className="flex-1 min-w-0 flex flex-col">
-    <AdminHeader
-  onOpenMobile={openMobileSidebar}
-  isDarkMode={isDarkMode}
-  toggleTheme={toggleTheme}
-  onToggleNotifications={toggleNotifications}
-  isNotificationsOpen={isNotificationsOpen}
-  onCloseNotifications={closeNotifications}
-  activities={activities}
-/>
+          <AdminHeader
+            onOpenMobile={openMobileSidebar}
+            isDarkMode={isDarkMode}
+            toggleTheme={toggleTheme}
+            onToggleNotifications={toggleNotifications}
+            isNotificationsOpen={isNotificationsOpen}
+            onCloseNotifications={closeNotifications}
+            activities={activities}
+          />
 
-          <main className="flex-1 p-0 md:p-0">
-            {children}
-          </main>
+          <main className="flex-1 p-0 md:p-0">{children}</main>
         </div>
       </div>
     </div>

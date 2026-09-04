@@ -51,7 +51,7 @@
       color: var(--accent-primary) !important;
     }
 
-    .admin-root .placeholder\\:text-text-muted\/60::placeholder {
+    .admin-root [class~="placeholder:text-text-muted/60"]::placeholder {
       color: var(--text-muted);
       opacity: 0.6;
     }
@@ -91,31 +91,31 @@
        ADMIN HOVER / FOCUS UTILITIES
        ========================================================= */
 
-    .admin-root .hover\\:bg-accent-hover:hover {
+    .admin-root [class~="hover:bg-accent-hover"]:hover {
       background-color: var(--accent-hover) !important;
     }
 
-    .admin-root .hover\\:bg-bg-surface:hover {
+    .admin-root [class~="hover:bg-bg-surface"]:hover {
       background-color: var(--bg-surface) !important;
     }
 
-    .admin-root .hover\\:bg-bg-main:hover {
+    .admin-root [class~="hover:bg-bg-main"]:hover {
       background-color: var(--bg-main) !important;
     }
 
-    .admin-root .hover\\:text-text-main:hover {
+    .admin-root [class~="hover:text-text-main"]:hover {
       color: var(--text-main) !important;
     }
 
-    .admin-root .hover\\:text-accent-primary:hover {
+    .admin-root [class~="hover:text-accent-primary"]:hover {
       color: var(--accent-primary) !important;
     }
 
-    .admin-root .focus-within\\:border-accent-primary:focus-within {
+    .admin-root [class~="focus-within:border-accent-primary"]:focus-within {
       border-color: var(--accent-primary) !important;
     }
 
-    .admin-root .focus\\:border-accent-primary:focus {
+    .admin-root [class~="focus:border-accent-primary"]:focus {
       border-color: var(--accent-primary) !important;
     }
 
@@ -202,24 +202,25 @@
       background: var(--border-color);
       border-radius: 10px;
     }
+
     .todays-sessions-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
-}
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+    }
 
-.todays-sessions-scroll::-webkit-scrollbar {
-  width: 5px;
-}
+    .todays-sessions-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
 
-.todays-sessions-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
+    .todays-sessions-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-.todays-sessions-scroll::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 999px;
-}
+    .todays-sessions-scroll::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 999px;
+    }
 
-.todays-sessions-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
+    .todays-sessions-scroll::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }

@@ -1,0 +1,94 @@
+
+@keyframes adminFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  70% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes adminSubtlePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+}
+
+.admin-root .animate-slide-up {
+  animation: adminFadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.admin-root .animate-pop-in {
+  animation: adminPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.admin-root .animate-fade-in {
+  animation: adminFadeIn 0.3s ease-in-out forwards;
+}
+
+.admin-root .pulse-subtle {
+  animation: adminSubtlePulse 2.5s infinite ease-in-out;
+}
+    /* =========================================================
+       ADMIN STAGGER DELAYS
+       ========================================================= */
+
+    .admin-root .delay-100 {
+      animation-delay: 100ms;
+    }
+
+    .admin-root .delay-150 {
+      animation-delay: 150ms;
+    }
+
+    .admin-root .delay-200 {
+      animation-delay: 200ms;
+    }
+
+    .admin-root .delay-250 {
+      animation-delay: 250ms;
+    }
+
+    .admin-root .delay-300 {
+      animation-delay: 300ms;
+    }
+
+    .admin-root .delay-400 {
+      animation-delay: 400ms;
+    }

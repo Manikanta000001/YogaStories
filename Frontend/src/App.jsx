@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
 
 import CustomCursor from "./components/common/CustomCursor";
 import Navbar from "./components/layout/Navbar";
@@ -25,14 +31,29 @@ import ContactAndFooter from "./components/contact/ContactAndFooter";
 import BreathingModal from "./components/modals/BreathingModal";
 import BookingModal from "./components/modals/BookingModal";
 
-function App() {
+import Dashboard from "./pages/admin/Dashboard";
+import Bookings from "./pages/admin/Bookings";
+import SessionPage from "./pages/admin/Sessions";
+import Classes from "./pages/admin/Classes";
+import Announcements from "./pages/admin/Announcements";
+import Clients from "./pages/admin/Clients";
+import Analytics from "./pages/admin/Analytics";
+import Settings from "./pages/admin/Settings";
+import RazorpayTest from "./components/payment/RazorpayTest";
+// import CashfreeTest from "./components/payment/CashfreeTest";
+
+function PublicSite() {
   const [theme, setTheme] = useState("light");
   const [scrolled, setScrolled] = useState(false);
 
   const [isBreathingOpen, setIsBreathingOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
-const [selectedClass, setSelectedClass] = useState(null);
+  const [searchParams] = useSearchParams();
+
+  const cashfreeOrderId = searchParams.get("cashfree_order_id");
+
+  const [selectedClass, setSelectedClass] = useState(null);
 
   const [isThemeAnimating, setIsThemeAnimating] = useState(false);
 
@@ -42,7 +63,12 @@ const [selectedClass, setSelectedClass] = useState(null);
   });
 
   useEffect(() => {
-    // Load saved theme
+    if (!cashfreeOrderId) return;
+
+    setIsBookingOpen(true);
+  }, [cashfreeOrderId]);
+
+  useEffect(() => {
     const savedTheme =
       localStorage.getItem("energy_theme") ||
       (window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -50,6 +76,7 @@ const [selectedClass, setSelectedClass] = useState(null);
         : "light");
 
     setTheme(savedTheme);
+
     document.documentElement.setAttribute("data-theme", savedTheme);
 
     const handleScroll = () => {
@@ -59,6 +86,7 @@ const [selectedClass, setSelectedClass] = useState(null);
     const handleMouseMove = (e) => {
       if (window.innerWidth > 768) {
         const x = (e.clientX - window.innerWidth / 2) / 40;
+
         const y = (e.clientY - window.innerHeight / 2) / 40;
 
         setMousePos({ x, y });
@@ -66,10 +94,12 @@ const [selectedClass, setSelectedClass] = useState(null);
     };
 
     window.addEventListener("scroll", handleScroll);
+
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
@@ -84,6 +114,7 @@ const [selectedClass, setSelectedClass] = useState(null);
     const rect = e.currentTarget.getBoundingClientRect();
 
     const x = rect.left + rect.width / 2;
+
     const y = rect.top + rect.height / 2;
 
     const overlay = document.createElement("div");
@@ -125,16 +156,19 @@ const [selectedClass, setSelectedClass] = useState(null);
 
     setTimeout(() => {
       overlay.remove();
+
       setIsThemeAnimating(false);
     }, 900);
   };
-const openBooking = (classData = null) => {
-  setSelectedClass(classData);
-  setIsBookingOpen(true);
-};
+
+  const openBooking = (classData = null) => {
+    setSelectedClass(classData);
+
+    setIsBookingOpen(true);
+  };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
       <CustomCursor />
 
       <Navbar
@@ -158,8 +192,8 @@ const openBooking = (classData = null) => {
         <SilverMedalSpotlight />
 
         <PracticeFlow
-  onSelectPractice={(classData) => openBooking(classData)}
-/>
+          onSelectPractice={(classData) => openBooking(classData)}
+        />
 
         <ClassesSection onOpenBooking={(practice) => openBooking(practice)} />
 
@@ -181,12 +215,42 @@ const openBooking = (classData = null) => {
       )}
 
       {isBookingOpen && (
-       <BookingModal
-  initialClass={selectedClass}
-  onClose={() => setIsBookingOpen(false)}
-/>
+        <BookingModal
+          initialClass={selectedClass}
+          onClose={() => setIsBookingOpen(false)}
+        />
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public Website */}
+        <Route path="/" element={<PublicSite />} />
+
+        {/* Admin Dashboard */}
+        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/bookings" element={<Bookings />} />
+
+        <Route path="/sessions" element={<SessionPage />} />
+        <Route path="/classes" element={<Classes />} />
+        <Route path="/announcements" element={<Announcements />} />
+        <Route path="/clients" element={<Clients />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/payment" element={<RazorpayTest />} />
+        {/* <Route
+          path="/cashfree"
+          element={
+           
+             <CashfreeTest/>
+          }
+        /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

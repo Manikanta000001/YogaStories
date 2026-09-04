@@ -1,4 +1,6 @@
 const Class = require("../models/Class");
+const Session = require("../models/Session");
+const Booking = require("../models/Booking");
 
 // GET /api/classes
 const getClasses = async (req, res) => {
@@ -14,6 +16,28 @@ const getClasses = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching classes:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch classes",
+    });
+  }
+};
+
+// GET /api/classes/admin
+const getAdminClasses = async (req, res) => {
+  try {
+    const classes = await Class.find().sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      count: classes.length,
+      data: classes,
+    });
+  } catch (error) {
+    console.error("Error fetching admin classes:", error.message);
 
     res.status(500).json({
       success: false,
@@ -61,24 +85,21 @@ const createClass = async (req, res) => {
       image,
       benefits,
       schedule,
-      price,
     } = req.body;
 
     if (
-      !title ||
-      !slug ||
-      !description ||
-      duration === undefined ||
-      !level ||
-      !category ||
-      !image ||
-      price === undefined
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "All required class fields must be provided",
-      });
-    }
+  !title ||
+  !slug ||
+  !description ||
+  duration === undefined ||
+  !level ||
+  !category
+) {
+  return res.status(400).json({
+    success: false,
+    message: "All required class fields must be provided",
+  });
+}
 
     const existingClass = await Class.findOne({ slug });
 
@@ -99,7 +120,6 @@ const createClass = async (req, res) => {
       image,
       benefits,
       schedule,
-      price,
     });
 
     res.status(201).json({
@@ -139,7 +159,6 @@ const updateClass = async (req, res) => {
       image,
       benefits,
       schedule,
-      price,
       active,
     } = req.body;
 
@@ -152,7 +171,6 @@ const updateClass = async (req, res) => {
     if (image !== undefined) yogaClass.image = image;
     if (benefits !== undefined) yogaClass.benefits = benefits;
     if (schedule !== undefined) yogaClass.schedule = schedule;
-    if (price !== undefined) yogaClass.price = price;
     if (active !== undefined) yogaClass.active = active;
 
     const updatedClass = await yogaClass.save();
@@ -175,7 +193,9 @@ const updateClass = async (req, res) => {
 // DELETE /api/classes/:id
 const deleteClass = async (req, res) => {
   try {
-    const yogaClass = await Class.findById(req.params.id);
+    const classId = req.params.id;
+
+    const yogaClass = await Class.findById(classId);
 
     if (!yogaClass) {
       return res.status(404).json({
@@ -184,14 +204,32 @@ const deleteClass = async (req, res) => {
       });
     }
 
-    // Soft delete
-    yogaClass.active = false;
+    // Find all sessions belonging to this class
+    const sessions = await Session.find({
+      classId,
+    }).select("_id");
 
-    await yogaClass.save();
+    const sessionIds = sessions.map((session) => session._id);
+
+    // Delete bookings related to this class/session
+    await Booking.deleteMany({
+      $or: [
+        { classId },
+        { sessionId: { $in: sessionIds } },
+      ],
+    });
+
+    // Delete all sessions belonging to this class
+    await Session.deleteMany({
+      classId,
+    });
+
+    // Permanently delete the class
+    await Class.findByIdAndDelete(classId);
 
     res.status(200).json({
       success: true,
-      message: "Class deleted successfully",
+      message: "Class, related sessions, and bookings deleted successfully",
     });
   } catch (error) {
     console.error("Error deleting class:", error.message);
@@ -209,4 +247,5 @@ module.exports = {
   createClass,
   updateClass,
   deleteClass,
+  getAdminClasses
 };

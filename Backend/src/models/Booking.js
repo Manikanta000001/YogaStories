@@ -37,6 +37,15 @@ const bookingSchema = new mongoose.Schema(
       enum: ["card", "upi", "other"],
       default: null,
     },
+    paymentId: {
+  type: String,
+  default: null,
+},
+
+paymentOrderId: {
+  type: String,
+  default: null,
+},
 
     amount: {
       type: Number,
@@ -58,5 +67,5 @@ const bookingSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+bookingSchema.index({ sessionId: 1, status: 1 });
 module.exports = mongoose.model("Booking", bookingSchema);

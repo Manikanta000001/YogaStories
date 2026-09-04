@@ -56,7 +56,7 @@ function Notification({ notification, onClose }) {
   };
 
   return (
-    <div className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-24px)] sm:w-[420px] pointer-events-none px-3 sm:px-0">
+   <div className="fixed bottom-5 right-0 sm:bottom-6 sm:right-6 z-[100] w-[calc(100%-24px)] sm:w-[420px] pointer-events-none px-3 sm:px-0">
       <div
         className={`
           yogapt-toast-card

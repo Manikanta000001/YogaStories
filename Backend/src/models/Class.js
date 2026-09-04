@@ -71,11 +71,6 @@ const classSchema = new mongoose.Schema(
       default: [],
     },
 
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
 
     active: {
       type: Boolean,

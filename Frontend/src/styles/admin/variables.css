@@ -1,0 +1,36 @@
+.admin-root {
+      --bg-main: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --accent-primary: #4F46E5;
+      --accent-primary-rgb: 79, 70, 229;
+      --accent-hover: #4338CA;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --sidebar-bg: #FFFFFF;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(79, 70, 229, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+      /* Admin root itself */
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+    }
+
+    .admin-root[data-admin-theme="dark"] {
+      --bg-main: #090D16;
+      --bg-surface: #0F172A;
+      --bg-card: #131E33;
+      --accent-primary: #6366F1;
+      --accent-primary-rgb: 99, 102, 241;
+      --accent-hover: #4F46E5;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border-color: #1E293B;
+      --sidebar-bg: #0B1120;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    }

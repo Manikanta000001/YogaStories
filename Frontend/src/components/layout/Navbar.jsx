@@ -23,16 +23,17 @@ function Navbar({
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 transition-all duration-500">
       <nav
-        className={`flex items-center justify-between px-6 py-3 rounded-full transition-all duration-500 max-w-7xl w-full border ${
+        className={`flex items-center justify-between px-3 sm:px-6 py-3 rounded-full transition-all duration-500 max-w-7xl w-full border overflow-hidden  ${
           scrolled
             ? "bg-[var(--glass-bg)] backdrop-blur-xl border-[var(--border-color)] shadow-2xl scale-[0.98]"
             : "bg-transparent border-transparent"
         }`}
       >
         {/* BRAND */}
-        <a href="#hero" className="flex items-center gap-2 group">
+        <a href="#hero" className="flex items-center gap-2 group ml-2 sm:ml-4">
           <span className="font-display font-extrabold tracking-wider text-sm md:text-base">
-            LEENA SAJJA
+            <span className="sm:hidden">LEENA</span>
+            <span className="hidden sm:inline">LEENA SAJJA</span>
           </span>
         </a>
 
@@ -61,7 +62,7 @@ function Navbar({
 
           <button
             onClick={onOpenBooking}
-            className="px-5 py-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] text-white text-xs font-bold tracking-wider shadow-lg hover:brightness-110 hover:shadow-amber-500/20 active:scale-95 transition-all"
+            className="hidden sm:block px-5 py-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] text-white text-xs font-bold tracking-wider shadow-lg hover:brightness-110 hover:shadow-amber-500/20 active:scale-95 transition-all"
           >
             BOOK
           </button>

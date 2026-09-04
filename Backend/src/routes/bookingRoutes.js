@@ -5,9 +5,12 @@ const {
   getBookings,
   getBookingById,
   cancelBooking,
+  validateBooking
 } = require("../controllers/bookingController");
 
 const router = express.Router();
+
+router.post("/validate", validateBooking);
 
 // Create a booking
 router.post("/", createBooking);

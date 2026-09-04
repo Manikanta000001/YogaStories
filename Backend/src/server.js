@@ -1,11 +1,16 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const path = require("path");
 const classRoutes = require("./routes/classRoutes");
 const sessionRoutes = require("./routes/sessionRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const clientRoutes = require("./routes/clientRoutes");
+const announcementRoutes = require("./routes/announcementRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const cashfreeRoutes = require("./routes/cashfreeRoutes");
 
 dotenv.config();
 
@@ -30,6 +35,11 @@ app.get("/", (req, res) => {
 app.use("/api/classes", classRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/clients", clientRoutes);
+app.use("/api/announcements", announcementRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/cashfree", cashfreeRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({

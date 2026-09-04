@@ -1,0 +1,225 @@
+    /* =========================================================
+       ADMIN UTILITY CLASSES
+       Scoped so they only work inside .admin-root
+       ========================================================= */
+
+    .admin-root .bg-bg-main {
+      background-color: var(--bg-main) !important;
+    }
+
+    .admin-root .bg-bg-surface {
+      background-color: var(--bg-surface) !important;
+    }
+
+    .admin-root .bg-bg-card {
+      background-color: var(--bg-card) !important;
+    }
+
+    .admin-root .bg-sidebar-bg {
+      background-color: var(--sidebar-bg) !important;
+    }
+
+    .admin-root .bg-accent-primary {
+      background-color: var(--accent-primary) !important;
+    }
+
+    .admin-root .bg-accent-primary\/5 {
+      background-color: rgba(var(--accent-primary-rgb), 0.05) !important;
+    }
+
+    .admin-root .bg-accent-primary\/10 {
+      background-color: rgba(var(--accent-primary-rgb), 0.1) !important;
+    }
+
+    .admin-root .bg-accent-primary\/50 {
+      background-color: rgba(var(--accent-primary-rgb), 0.5) !important;
+    }
+
+    .admin-root .bg-accent-primary\/80 {
+      background-color: rgba(var(--accent-primary-rgb), 0.8) !important;
+    }
+
+    .admin-root .text-text-main {
+      color: var(--text-main) !important;
+    }
+
+    .admin-root .text-text-muted {
+      color: var(--text-muted) !important;
+    }
+
+    .admin-root .text-accent-primary {
+      color: var(--accent-primary) !important;
+    }
+
+    .admin-root .placeholder\\:text-text-muted\/60::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    .admin-root .border-border-color {
+      border-color: var(--border-color) !important;
+    }
+
+    .admin-root .ring-bg-surface {
+      --tw-ring-color: var(--bg-surface) !important;
+    }
+
+    /* =========================================================
+       ADMIN GRADIENT UTILITIES
+       ========================================================= */
+
+    .admin-root .from-bg-surface {
+      --tw-gradient-from: var(--bg-surface) var(--tw-gradient-from-position);
+      --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .admin-root .via-bg-surface {
+      --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+      --tw-gradient-stops:
+        var(--tw-gradient-from),
+        var(--bg-surface) var(--tw-gradient-via-position),
+        var(--tw-gradient-to);
+    }
+
+    .admin-root .to-accent-primary\/5 {
+      --tw-gradient-to:
+        rgba(var(--accent-primary-rgb), 0.05) var(--tw-gradient-to-position);
+    }
+
+    /* =========================================================
+       ADMIN HOVER / FOCUS UTILITIES
+       ========================================================= */
+
+    .admin-root .hover\\:bg-accent-hover:hover {
+      background-color: var(--accent-hover) !important;
+    }
+
+    .admin-root .hover\\:bg-bg-surface:hover {
+      background-color: var(--bg-surface) !important;
+    }
+
+    .admin-root .hover\\:bg-bg-main:hover {
+      background-color: var(--bg-main) !important;
+    }
+
+    .admin-root .hover\\:text-text-main:hover {
+      color: var(--text-main) !important;
+    }
+
+    .admin-root .hover\\:text-accent-primary:hover {
+      color: var(--accent-primary) !important;
+    }
+
+    .admin-root .focus-within\\:border-accent-primary:focus-within {
+      border-color: var(--accent-primary) !important;
+    }
+
+    .admin-root .focus\\:border-accent-primary:focus {
+      border-color: var(--accent-primary) !important;
+    }
+
+
+    /* =========================================================
+       ADMIN CARDS
+       ========================================================= */
+
+    .admin-root .app-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+    }
+
+    .admin-root .app-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(var(--accent-primary-rgb), 0.35);
+      transform: translateY(-2px);
+    }
+
+    .admin-root .floating-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      height: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-root .floating-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+
+    /* =========================================================
+       ADMIN INTERACTIONS
+       ========================================================= */
+
+    .admin-root .interactive-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-root .interactive-btn:active {
+      transform: scale(0.96);
+    }
+
+    .admin-root .interactive-row {
+      transition: all 0.25s ease;
+    }
+
+    .admin-root .interactive-row:hover {
+      transform: translateX(4px);
+      border-color: rgba(var(--accent-primary-rgb), 0.3);
+    }
+
+    /* =========================================================
+       ADMIN SIDEBAR
+       ========================================================= */
+
+    .admin-root aside {
+      transition:
+        width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* =========================================================
+       ADMIN SCROLLBAR
+       ========================================================= */
+
+    .admin-root::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .admin-root::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .admin-root::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 10px;
+    }
+    .todays-sessions-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.todays-sessions-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.todays-sessions-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todays-sessions-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+.todays-sessions-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

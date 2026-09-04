@@ -1,5 +1,6 @@
 const Session = require("../models/Session");
 const Class = require("../models/Class");
+const Booking = require("../models/Booking");
 
 // POST /api/sessions
 const createSession = async (req, res) => {
@@ -90,31 +91,52 @@ const createSession = async (req, res) => {
 
 
 // GET /api/sessions
+
 const getSessions = async (req, res) => {
   try {
     const { classId, date } = req.query;
-
     const filter = {};
 
-    if (classId) {
-      filter.classId = classId;
-    }
-
-    if (date) {
-      filter.date = new Date(date);
-    }
+    if (classId) filter.classId = classId;
+    if (date) filter.date = new Date(date);
 
     const sessions = await Session.find(filter)
       .populate("classId", "title slug")
-      .sort({
-        date: 1,
-        startTime: 1,
-      });
+      .sort({ date: 1, startTime: 1 });
+
+    // Get all active booking counts in one query
+    const bookingCounts = await Booking.aggregate([
+      {
+        $match: {
+          status: { $in: ["pending", "confirmed"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$sessionId",
+          bookedCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Convert counts into a quick lookup map
+    const countMap = new Map(
+      bookingCounts.map((item) => [
+        item._id.toString(),
+        item.bookedCount,
+      ])
+    );
+
+    // Attach the real booking count to each session
+    const sessionsWithRealCount = sessions.map((session) => ({
+      ...session.toObject(),
+      bookedCount: countMap.get(session._id.toString()) || 0,
+    }));
 
     res.status(200).json({
       success: true,
-      count: sessions.length,
-      data: sessions,
+      count: sessionsWithRealCount.length,
+      data: sessionsWithRealCount,
     });
   } catch (error) {
     console.error("Error fetching sessions:", error.message);
@@ -160,7 +182,9 @@ const getSessionById = async (req, res) => {
 // PATCH /api/sessions/:id
 const updateSession = async (req, res) => {
   try {
-    const session = await Session.findById(req.params.id);
+  const { id } = req.params;
+
+    const session = await Session.findById(id);
 
     if (!session) {
       return res.status(404).json({

@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { api } from "../../services/api";
 import Notification from "../common/Notification";
+import { useSearchParams } from "react-router-dom";
+import { Clock, Check, ChevronRight } from "lucide-react";
+const PAYMENT_GATEWAY = import.meta.env.VITE_PAYMENT_GATEWAY || "razorpay";
 
 function BookingModal({ initialClass, onClose }) {
   const getToday = () => {
@@ -26,7 +29,6 @@ function BookingModal({ initialClass, onClose }) {
     name: "",
     email: "",
     phone: "",
-    paymentMethod: "card",
   });
   const [isSuccess, setIsSuccess] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -34,6 +36,11 @@ function BookingModal({ initialClass, onClose }) {
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [sessionError, setSessionError] = useState(null);
   const [notification, setNotification] = useState(null);
+  const cashfreeCompletionStarted = useRef(false);
+
+  const [searchParams] = useSearchParams();
+
+  const cashfreeOrderId = searchParams.get("cashfree_order_id");
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -71,6 +78,69 @@ function BookingModal({ initialClass, onClose }) {
 
     fetchClasses();
   }, [initialClass]);
+
+  useEffect(() => {
+    if (!cashfreeOrderId) return;
+
+    const pendingBooking = sessionStorage.getItem("cashfree_pending_booking");
+
+    if (!pendingBooking) {
+      return;
+    }
+
+    const completeCashfreeBooking = async () => {
+      if (cashfreeCompletionStarted.current) return;
+
+      cashfreeCompletionStarted.current = true;
+      try {
+        setIsProcessingPayment(true);
+
+        const booking = JSON.parse(pendingBooking);
+
+        // Verify Cashfree payment
+        await api("/cashfree/verify", {
+          method: "POST",
+          body: JSON.stringify({
+            order_id: cashfreeOrderId,
+          }),
+        });
+
+        // Payment verified — create the booking
+        await api("/bookings", {
+          method: "POST",
+          body: JSON.stringify({
+            name: booking.name,
+            email: booking.email,
+            phone: booking.phone,
+            sessionId: booking.sessionId,
+            paymentMethod: "other",
+            paymentId: cashfreeOrderId,
+            paymentOrderId: cashfreeOrderId,
+          }),
+        });
+
+        sessionStorage.removeItem("cashfree_pending_booking");
+
+        setIsProcessingPayment(false);
+        setIsSuccess(true);
+      } catch (error) {
+        console.error("Cashfree booking completion error:", error);
+
+        sessionStorage.removeItem("cashfree_pending_booking");
+
+        setIsProcessingPayment(false);
+
+        setNotification({
+          type: "error",
+          message:
+            error.message ||
+            "Payment was successful, but we could not complete your booking.",
+        });
+      }
+    };
+
+    completeCashfreeBooking();
+  }, [cashfreeOrderId]);
 
   useEffect(() => {
     if (!selectedClass?._id) {
@@ -234,6 +304,9 @@ function BookingModal({ initialClass, onClose }) {
     }
   };
   const handleBack = () => setStep((s) => Math.max(s - 1, 1));
+  const selectedSession = sessions.find(
+    (session) => session._id === formData.sessionId,
+  );
 
   const handleConfirm = async () => {
     if (!formData.sessionId) {
@@ -254,48 +327,348 @@ function BookingModal({ initialClass, onClose }) {
       return;
     }
 
-    if (sessionType === "paid") {
+    if (!selectedSession) {
       showNotification({
-        type: "info",
-        title: "Payment Coming Soon",
-        message: "Online payment will be available shortly.",
+        type: "error",
+        title: "Session Error",
+        message: "Unable to find the selected session.",
       });
       return;
     }
 
+    // FREE SESSION
+    if (sessionType === "free") {
+      try {
+        setIsProcessingPayment(true);
+
+        const response = await api("/bookings", {
+          method: "POST",
+          body: JSON.stringify({
+            sessionId: formData.sessionId,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+          }),
+        });
+
+        console.log("Free booking created:", response);
+
+        showNotification({
+          type: "success",
+          title: "Booking Request Received",
+          message:
+            "Your request has been submitted. We'll let you know once your session is confirmed.",
+        });
+
+        setIsSuccess(true);
+      } catch (error) {
+        console.error("Booking failed:", error);
+
+        showNotification({
+          type: "error",
+          title: "Booking Failed",
+          message:
+            error.message ||
+            "Unable to complete your booking. Please try again.",
+        });
+      } finally {
+        setIsProcessingPayment(false);
+      }
+
+      return;
+    }
+
+    // PAID SESSION
     try {
       setIsProcessingPayment(true);
 
-      const response = await api("/bookings", {
+      // Get actual price from selected session
+      const amount = Number(selectedSession.price);
+
+      if (!amount || amount <= 0) {
+        throw new Error("Invalid session price.");
+      }
+
+      // Validate booking before taking payment
+      await api("/bookings/validate", {
         method: "POST",
         body: JSON.stringify({
-          sessionId: formData.sessionId,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
+          sessionId: formData.sessionId,
         }),
       });
 
-      console.log("Booking created:", response);
-      showNotification({
-        type: "success",
-        title: "Booking Request Received",
-        message:
-          "Your request has been submitted. We'll let you know once your session is confirmed.",
+      // ============================================================
+      // CASHFREE PAYMENT
+      // ============================================================
+      if (PAYMENT_GATEWAY === "cashfree") {
+        // Load Cashfree Checkout SDK
+        if (!window.Cashfree) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+
+            script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+
+            script.onload = resolve;
+
+            script.onerror = () =>
+              reject(new Error("Failed to load Cashfree Checkout."));
+
+            document.body.appendChild(script);
+          });
+        }
+
+        // Create Cashfree order
+        const orderResponse = await api("/cashfree/create-order", {
+          method: "POST",
+          body: JSON.stringify({
+            amount,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+          }),
+        });
+
+        console.log("Cashfree order created:", orderResponse);
+
+        const order = orderResponse.order;
+
+        if (!order?.payment_session_id) {
+          throw new Error("Cashfree payment session was not created.");
+        }
+
+        // Initialize Cashfree
+        const cashfree = window.Cashfree({
+          mode:
+            import.meta.env.VITE_CASHFREE_ENVIRONMENT === "production"
+              ? "production"
+              : "sandbox",
+        });
+
+        // Save booking details temporarily before Cashfree redirects
+        sessionStorage.setItem(
+          "cashfree_pending_booking",
+          JSON.stringify({
+            sessionId: formData.sessionId,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            amount,
+            orderId: order.order_id,
+          }),
+        );
+
+        // Open Cashfree Checkout
+        // Open Cashfree Checkout
+        const checkoutResult = await cashfree.checkout({
+          paymentSessionId: order.payment_session_id,
+          redirectTarget: "_modal",
+        });
+
+        console.log("Cashfree checkout result:", checkoutResult);
+
+        if (checkoutResult?.paymentDetails) {
+          // Payment attempt completed.
+          // Now verify the actual payment status on our backend.
+          await api("/cashfree/verify", {
+            method: "POST",
+            body: JSON.stringify({
+              order_id: order.order_id,
+            }),
+          });
+
+          // Payment verified successfully — create the booking.
+          await api("/bookings", {
+            method: "POST",
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              sessionId: formData.sessionId,
+              paymentMethod: "other",
+              paymentId: order.order_id,
+              paymentOrderId: order.order_id,
+            }),
+          });
+
+          sessionStorage.removeItem("cashfree_pending_booking");
+
+          setIsProcessingPayment(false);
+          setIsSuccess(true);
+
+          return;
+        }
+
+        if (checkoutResult?.error) {
+          console.error("Cashfree checkout error:", checkoutResult.error);
+
+          setIsProcessingPayment(false);
+
+          setNotification({
+            type: "error",
+            message: "Payment was not completed. Please try again.",
+          });
+
+          return;
+        }
+
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      // ============================================================
+      // RAZORPAY PAYMENT
+      // ============================================================
+
+      // Load Razorpay Checkout script
+      if (!window.Razorpay) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+          script.onload = resolve;
+
+          script.onerror = () =>
+            reject(new Error("Failed to load Razorpay Checkout."));
+
+          document.body.appendChild(script);
+        });
+      }
+
+      // Create Razorpay order
+      const orderResponse = await api("/payments/create-order", {
+        method: "POST",
+        body: JSON.stringify({
+          amount,
+        }),
       });
 
-      setIsSuccess(true);
+      console.log("Razorpay order created:", orderResponse);
+
+      const order = orderResponse.order;
+
+      // Open Razorpay Checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+        amount: order.amount,
+        currency: order.currency,
+
+        name: "YogaStories",
+
+        image: "https://yogastories.vercel.app/favicon.png",
+
+        description: `${selectedClass?.title || "Yoga"} Session`,
+
+        order_id: order.id,
+
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+
+        theme: {
+          color: "#6F8064",
+          backdrop_color: "#111111",
+        },
+
+        handler: async function (paymentResponse) {
+          try {
+            console.log("Razorpay payment successful:", paymentResponse);
+
+            // Verify payment on backend
+            const verifyResponse = await api("/payments/verify", {
+              method: "POST",
+              body: JSON.stringify({
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+              }),
+            });
+
+            console.log("Razorpay verification:", verifyResponse);
+
+            if (!verifyResponse.success) {
+              throw new Error(
+                verifyResponse.message || "Payment verification failed.",
+              );
+            }
+
+            // Only create booking AFTER payment verification
+            const bookingResponse = await api("/bookings", {
+              method: "POST",
+              body: JSON.stringify({
+                sessionId: formData.sessionId,
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                paymentId: paymentResponse.razorpay_payment_id,
+                paymentOrderId: paymentResponse.razorpay_order_id,
+              }),
+            });
+
+            console.log("Paid booking created:", bookingResponse);
+
+            setIsProcessingPayment(false);
+
+            // Show success
+            showNotification({
+              type: "success",
+              title: "Payment Successful",
+              message:
+                "Your payment was successful and your session has been booked.",
+            });
+
+            setIsSuccess(true);
+          } catch (error) {
+            console.error("Payment verification/booking failed:", error);
+
+            setIsProcessingPayment(false);
+
+            showNotification({
+              type: "error",
+              title: "Payment Verification Failed",
+              message:
+                error.message ||
+                "Payment was received, but we couldn't verify your booking. Please contact us.",
+            });
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log("Razorpay checkout closed.");
+
+            setIsProcessingPayment(false);
+
+            showNotification({
+              type: "info",
+              title: "Payment Cancelled",
+              message:
+                "The payment window was closed. Your booking was not created.",
+            });
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.open();
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error("Payment failed:", error);
+
+      setIsProcessingPayment(false);
 
       showNotification({
         type: "error",
-        title: "Booking Failed",
+        title: "Payment Failed",
         message:
-          error.message || "Unable to complete your booking. Please try again.",
+          error.message || "Unable to start the payment. Please try again.",
       });
-    } finally {
-      setIsProcessingPayment(false);
     }
   };
 
@@ -592,26 +965,12 @@ function BookingModal({ initialClass, onClose }) {
                     <p>
                       <span className="opacity-60">Amount:</span>{" "}
                       <strong className="text-[var(--accent-gold)]">
-                        {sessionType === "free" ? "FREE ($0)" : "$45.00"}
+                        {sessionType === "free"
+                          ? "FREE (₹0)"
+                          : `₹${selectedSession?.price || 0}`}
                       </strong>
                     </p>
                   </div>
-
-                  {sessionType === "paid" && (
-                    <div className="p-3 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-2">
-                      <p className="text-[11px] font-bold uppercase tracking-wider">
-                        Select Payment Method
-                      </p>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <label className="flex items-center gap-2 p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] cursor-pointer">
-                          <input type="radio" name="pay" defaultChecked /> Card
-                        </label>
-                        <label className="flex items-center gap-2 p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] cursor-pointer">
-                          <input type="radio" name="pay" /> UPI / Wallet
-                        </label>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
 
@@ -650,35 +1009,434 @@ function BookingModal({ initialClass, onClose }) {
               </div>
             </div>
           ) : (
-            <div className="text-center py-6 space-y-4 animate-fade-in">
-              <div
-                className={`w-16 h-16 rounded-full text-3xl flex items-center justify-center mx-auto animate-bounce ${
-                  sessionType === "free"
-                    ? "bg-amber-500/20 text-amber-600"
-                    : "bg-emerald-500/20 text-emerald-600"
-                }`}
-              >
-                {sessionType === "free" ? "⏳" : "✓"}
+            //  <div className="text-center py-6 space-y-4 animate-fade-in">
+            //     <div
+            //       className={`w-16 h-16 rounded-full text-3xl flex items-center justify-center mx-auto animate-bounce ${
+            //         sessionType === "free"
+            //           ? "bg-amber-500/20 text-amber-600"
+            //           : "bg-emerald-500/20 text-emerald-600"
+            //       }`}
+            //     >
+            //       {sessionType === "free" ? "⏳" : "✓"}
+            //     </div>
+
+            //     <h3 className="text-2xl font-display font-extrabold">
+            //       {sessionType === "free"
+            //         ? "REQUEST SUBMITTED."
+            //         : "PAYMENT SUCCESSFUL!"}
+            //     </h3>
+
+            //     <p className="text-xs sm:text-sm opacity-80 max-w-sm mx-auto leading-relaxed">
+            //       {sessionType === "free"
+            //         ? "Your session request has been successfully submitted. We'll notify you once the session is confirmed."
+            //         : "Your payment has been received successfully. We'll notify you once your session is confirmed."}
+            //     </p>
+
+            //     <button
+            //       onClick={onClose}
+            //       className="px-7 py-2.5 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] text-xs font-bold uppercase tracking-wider hover:opacity-90"
+            //     >
+            //       CLOSE EXPERIENCE
+            //     </button>
+            //   </div>
+            <div className="text-center py-7 px-4 sm:px-6 space-y-6 max-w-sm mx-auto animate-fade-in">
+              <style>{`
+    @keyframes yogapt-shockwave {
+      0% {
+        transform: scale(0.6);
+        opacity: 0.9;
+      }
+      50% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: scale(1.75);
+        opacity: 0;
+      }
+    }
+
+    @keyframes yogapt-spark-ray {
+      0% {
+        transform: rotate(var(--rot)) translateY(0) scale(0);
+        opacity: 0;
+      }
+      40% {
+        opacity: 1;
+        transform: rotate(var(--rot)) translateY(-26px) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(var(--rot)) translateY(-36px) scale(0.3);
+      }
+    }
+
+    @keyframes yogapt-ring-trace {
+      0% {
+        stroke-dashoffset: 260;
+        transform: rotate(-100deg) scale(0.85);
+        opacity: 0;
+      }
+      30% {
+        opacity: 1;
+      }
+      100% {
+        stroke-dashoffset: 0;
+        transform: rotate(-90deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes yogapt-check-snap {
+      0% {
+        stroke-dashoffset: 48;
+        opacity: 0;
+      }
+      40% {
+        opacity: 1;
+      }
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+
+    @keyframes yogapt-gyro-clockwise {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes yogapt-gyro-counter {
+      0% {
+        transform: rotate(360deg) scale(0.92);
+      }
+      50% {
+        transform: rotate(180deg) scale(1.05);
+      }
+      100% {
+        transform: rotate(0deg) scale(0.92);
+      }
+    }
+
+    @keyframes yogapt-breathe {
+      0%, 100% {
+        transform: scale(0.96);
+        opacity: 0.35;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes yogapt-pop {
+      0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(8px);
+      }
+      70% {
+        transform: scale(1.04) translateY(-2px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes yogapt-slide {
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes yogapt-shine {
+      0% {
+        transform: translateX(-150%) skewX(-20deg);
+      }
+      100% {
+        transform: translateX(250%) skewX(-20deg);
+      }
+    }
+
+    .yogapt-pop {
+      animation: yogapt-pop 0.55s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .yogapt-breathe {
+      animation: yogapt-breathe 3s ease-in-out infinite;
+    }
+
+    .yogapt-shockwave-1 {
+      animation: yogapt-shockwave 1.4s
+        cubic-bezier(0.1, 0.9, 0.2, 1) 0.1s infinite;
+    }
+
+    .yogapt-shockwave-2 {
+      animation: yogapt-shockwave 1.6s
+        cubic-bezier(0.1, 0.9, 0.2, 1) 0.4s infinite;
+    }
+
+    .yogapt-spark {
+      animation: yogapt-spark-ray 0.75s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+    }
+
+    .yogapt-ring {
+      stroke-dasharray: 260;
+      stroke-dashoffset: 260;
+      animation: yogapt-ring-trace 0.65s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+      transform-origin: center;
+    }
+
+    .yogapt-check {
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: yogapt-check-snap 0.45s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards;
+    }
+
+    .yogapt-gyro-outer {
+      animation: yogapt-gyro-clockwise 8s linear infinite;
+      transform-origin: center;
+    }
+
+    .yogapt-gyro-inner {
+      animation: yogapt-gyro-counter 4.5s
+        cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      transform-origin: center;
+    }
+
+    .yogapt-slide-1 {
+      animation: yogapt-slide 0.5s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .yogapt-slide-2 {
+      animation: yogapt-slide 0.5s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+    }
+
+    .yogapt-slide-3 {
+      animation: yogapt-slide 0.5s
+        cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
+    }
+
+    .yogapt-shine-button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .yogapt-shine-button::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+      );
+      animation: yogapt-shine 3.5s ease-in-out infinite;
+    }
+  `}</style>
+
+              {/* Kinetic Animated Centerpiece */}
+              <div className="relative flex items-center justify-center mx-auto w-24 h-24 yogapt-pop">
+                {/* Ambient Glow */}
+                <div
+                  className={`absolute -inset-2 rounded-full blur-2xl pointer-events-none yogapt-breathe ${
+                    sessionType === "free"
+                      ? "bg-amber-500/30"
+                      : "bg-emerald-500/30"
+                  }`}
+                />
+
+                {/* Shockwave 1 */}
+                <div
+                  className={`absolute inset-0 rounded-full border pointer-events-none yogapt-shockwave-1 ${
+                    sessionType === "free"
+                      ? "border-amber-500/50 bg-amber-500/[0.05]"
+                      : "border-emerald-500/50 bg-emerald-500/[0.05]"
+                  }`}
+                />
+
+                {/* Shockwave 2 */}
+                <div
+                  className={`absolute inset-0 rounded-full border pointer-events-none yogapt-shockwave-2 ${
+                    sessionType === "free"
+                      ? "border-amber-400/30"
+                      : "border-emerald-400/30"
+                  }`}
+                />
+
+                {/* Photon Sparks — paid only */}
+                {sessionType !== "free" && (
+                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    {[0, 45, 90, 135, 180, 225, 270, 315].map(
+                      (angle, index) => (
+                        <span
+                          key={index}
+                          className="absolute w-1 h-3 rounded-full bg-emerald-400 yogapt-spark"
+                          style={{
+                            "--rot": `${angle}deg`,
+                            filter: "drop-shadow(0 0 4px rgba(52,211,153,0.8))",
+                          }}
+                        />
+                      ),
+                    )}
+                  </div>
+                )}
+
+                {/* Main Glass Badge */}
+                <div
+                  className={`relative z-10 w-20 h-20 rounded-2xl flex items-center justify-center backdrop-blur-xl border shadow-xl ${
+                    sessionType === "free"
+                      ? "bg-amber-500/10 border-amber-500/30 shadow-amber-500/10 text-amber-500"
+                      : "bg-emerald-500/10 border-emerald-500/30 shadow-emerald-500/10 text-emerald-500"
+                  }`}
+                >
+                  {sessionType === "free" ? (
+                    /* FREE — Gyroscope */
+                    <div className="relative w-14 h-14 flex items-center justify-center">
+                      {/* Outer Orbit */}
+                      <svg
+                        className="absolute inset-0 w-full h-full yogapt-gyro-outer"
+                        viewBox="0 0 56 56"
+                      >
+                        <circle
+                          cx="28"
+                          cy="28"
+                          r="24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeDasharray="6 8"
+                          className="opacity-70"
+                        />
+
+                        <circle cx="28" cy="4" r="2.5" fill="currentColor" />
+                      </svg>
+
+                      {/* Inner Orbit */}
+                      <svg
+                        className="absolute inset-1 w-12 h-12 yogapt-gyro-inner"
+                        viewBox="0 0 48 48"
+                      >
+                        <circle
+                          cx="24"
+                          cy="24"
+                          r="17"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeDasharray="18 40"
+                          className="opacity-90"
+                        />
+
+                        <circle cx="24" cy="7" r="2" fill="currentColor" />
+                      </svg>
+
+                      {/* Center */}
+                      <div className="relative z-10 p-2 rounded-full bg-amber-500/20 text-amber-500">
+                        <Clock className="w-7 h-7" strokeWidth={1.8} />
+                      </div>
+                    </div>
+                  ) : (
+                    /* PAID — Animated Check */
+                    <svg
+                      className="w-14 h-14"
+                      viewBox="0 0 100 100"
+                      fill="none"
+                      style={{
+                        filter: "drop-shadow(0 0 10px rgba(16, 185, 129, 0.4))",
+                      }}
+                    >
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="42"
+                        stroke="currentColor"
+                        strokeWidth="5"
+                        strokeLinecap="round"
+                        className="yogapt-ring"
+                      />
+
+                      <path
+                        d="M31 52.5L44 65.5L69 35.5"
+                        stroke="currentColor"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="yogapt-check"
+                      />
+                    </svg>
+                  )}
+                </div>
               </div>
 
-              <h3 className="text-2xl font-display font-extrabold">
-                {sessionType === "free"
-                  ? "REQUEST SUBMITTED."
-                  : "PAYMENT SUCCESSFUL!"}
-              </h3>
+              {/* Confirmation Content */}
+              <div className="space-y-2.5">
+                {/* Status */}
+                <div className="yogapt-slide-1">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase border ${
+                      sessionType === "free"
+                        ? "bg-amber-500/10 border-amber-500/25 text-amber-600 dark:text-amber-400"
+                        : "bg-emerald-500/10 border-emerald-500/25 text-emerald-600 dark:text-emerald-400"
+                    }`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        sessionType === "free"
+                          ? "bg-amber-500 animate-ping"
+                          : "bg-emerald-500 shadow-[0_0_8px_#10b981]"
+                      }`}
+                    />
 
-              <p className="text-xs sm:text-sm opacity-80 max-w-sm mx-auto leading-relaxed">
-                {sessionType === "free"
-                  ? "Your session request has been successfully submitted. We'll notify you once the session is confirmed."
-                  : "Your payment has been received successfully. We'll notify you once your session is confirmed."}
-              </p>
+                    {sessionType === "free"
+                      ? "Review in Progress"
+                      : "Instant Authorization"}
+                  </span>
+                </div>
 
-              <button
-                onClick={onClose}
-                className="px-7 py-2.5 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] text-xs font-bold uppercase tracking-wider hover:opacity-90"
-              >
-                CLOSE EXPERIENCE
-              </button>
+                {/* Heading */}
+                <h3 className="text-xl sm:text-2xl font-display font-extrabold tracking-tight">
+                  {sessionType === "free"
+                    ? "REQUEST SUBMITTED"
+                    : "PAYMENT SUCCESSFUL"}
+                </h3>
+
+                {/* Message */}
+                <p className="yogapt-slide-2 text-xs sm:text-sm opacity-80 max-w-sm mx-auto leading-relaxed">
+                  {sessionType === "free"
+                    ? "Your session request has been successfully submitted. We'll notify you once the session is confirmed."
+                    : "Your payment has been received successfully. We'll send you the class details shortly."}
+                </p>
+              </div>
+
+              {/* Existing YogaPT Close Button */}
+              <div className="yogapt-slide-3 pt-1">
+                <button
+                  onClick={onClose}
+                  type="button"
+                  className="yogapt-shine-button relative px-8 py-3 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] text-xs font-bold uppercase tracking-wider hover:opacity-90 active:scale-[0.98] transition-all shadow-md inline-flex items-center justify-center"
+                >
+                  <span className="relative z-10">CLOSE EXPERIENCE</span>
+                </button>
+              </div>
             </div>
           )}
         </div>

@@ -7,6 +7,168 @@ const Class = require("../models/Class");
 const {
     sendBookingConfirmation,
 } = require("../services/notificationService");
+
+
+// POST /api/bookings/validate
+const validateBooking = async (req, res) => {
+    try {
+        const {
+            name,
+            email,
+            phone,
+            sessionId,
+        } = req.body;
+
+        // -----------------------------
+        // 1. Validate request
+        // -----------------------------
+
+        if (!name || !email || !phone || !sessionId) {
+            return res.status(400).json({
+                success: false,
+                message: "Name, email, phone and sessionId are required",
+            });
+        }
+
+        // -----------------------------
+        // 2. Find session
+        // -----------------------------
+
+        const selectedSession = await Session.findById(sessionId);
+
+        if (!selectedSession) {
+            return res.status(404).json({
+                success: false,
+                message: "Session not found",
+            });
+        }
+
+        // -----------------------------
+        // 3. Find class
+        // -----------------------------
+
+        const yogaClass = await Class.findById(
+            selectedSession.classId
+        );
+
+        if (!yogaClass || !yogaClass.active) {
+            return res.status(404).json({
+                success: false,
+                message: "Class is not available",
+            });
+        }
+
+        // -----------------------------
+        // 4. Validate client/account
+        // -----------------------------
+
+        const normalizedEmail = email.toLowerCase().trim();
+        const normalizedPhone = phone.trim();
+
+        let client = await Client.findOne({
+            email: normalizedEmail,
+        });
+
+        if (!client) {
+            const phoneMatches = await Client.find({
+                phone: normalizedPhone,
+            });
+
+            if (phoneMatches.length > 1) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Multiple client accounts use this phone number. Please use the email associated with your account.",
+                });
+            }
+
+            if (phoneMatches.length === 1) {
+                client = phoneMatches[0];
+            }
+        }
+
+        // -----------------------------
+        // 5. Check client status
+        // -----------------------------
+
+        if (client && !client.active) {
+            return res.status(403).json({
+                success: false,
+                message: "This client account is inactive and cannot book sessions",
+            });
+        }
+
+        // -----------------------------
+        // 6. Check duplicate booking
+        // -----------------------------
+
+        if (client) {
+            const existingBooking = await Booking.findOne({
+                clientId: client._id,
+                sessionId: selectedSession._id,
+                status: {
+                    $in: ["pending", "confirmed"],
+                },
+            });
+
+            if (existingBooking) {
+                return res.status(409).json({
+                    success: false,
+                    message: "You already have a booking for this session",
+                    data: {
+                        bookingId: existingBooking._id,
+                    },
+                });
+            }
+        }
+
+        // -----------------------------
+        // 7. Check session status
+        // -----------------------------
+
+        if (selectedSession.status === "unavailable") {
+            return res.status(400).json({
+                success: false,
+                message: "This session is currently unavailable",
+            });
+        }
+
+        // -----------------------------
+        // 8. Check current capacity
+        // -----------------------------
+
+        if (
+            selectedSession.status === "filled" ||
+            selectedSession.bookedCount >= selectedSession.capacity
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "This session is already full",
+            });
+        }
+
+        // -----------------------------
+        // 9. Validation successful
+        // -----------------------------
+
+        return res.status(200).json({
+            success: true,
+            message: "Booking validation successful",
+        });
+
+    } catch (error) {
+        console.error(
+            "Error validating booking:",
+            error.message
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to validate booking",
+        });
+    }
+};
+
+
 // POST /api/bookings
 const createBooking = async (req, res) => {
     const dbSession = await mongoose.startSession();
@@ -18,6 +180,8 @@ const createBooking = async (req, res) => {
             phone,
             sessionId,
             paymentMethod,
+            paymentId,
+            paymentOrderId,
         } = req.body;
 
         // -----------------------------
@@ -66,32 +230,56 @@ const createBooking = async (req, res) => {
             // -----------------------------
             // 5. Find or create client
             // -----------------------------
+            const normalizedEmail = email.toLowerCase().trim();
+            const normalizedPhone = phone.trim();
 
             let client = await Client.findOne({
-                email: email.toLowerCase().trim(),
+                email: normalizedEmail,
             }).session(dbSession);
+
+            if (!client) {
+                const phoneMatches = await Client.find({
+                    phone: normalizedPhone,
+                }).session(dbSession);
+
+                if (phoneMatches.length === 1) {
+                    client = phoneMatches[0];
+                } else if (phoneMatches.length > 1) {
+                    throw new Error("MULTIPLE_CLIENTS_SAME_PHONE");
+                }
+            }
+
+            if (!client) {
+                client = await Client.findOne({
+                    phone: normalizedPhone,
+                }).session(dbSession);
+            }
 
             if (!client) {
                 const clients = await Client.create(
                     [{
                         name,
-                        email,
-                        phone,
-                    }, ], {
+                        email: normalizedEmail,
+                        phone: normalizedPhone,
+                    }], {
                         session: dbSession,
                     }
                 );
 
                 client = clients[0];
             } else {
+                if (!client.active) {
+                    throw new Error("CLIENT_INACTIVE");
+                }
+
                 client.name = name;
-                client.phone = phone;
+                client.email = normalizedEmail;
+                client.phone = normalizedPhone;
 
                 await client.save({
                     session: dbSession,
                 });
             }
-
             // -----------------------------
             // 6. Check duplicate booking
             // -----------------------------
@@ -159,11 +347,9 @@ const createBooking = async (req, res) => {
 
             const paymentStatus = isFreeSession ?
                 "not_required" :
-                "pending";
+                "paid";
 
-            const bookingStatus = isFreeSession ?
-                "confirmed" :
-                "pending";
+            const bookingStatus = "confirmed";
 
             // -----------------------------
             // 10. Mark session filled
@@ -195,7 +381,16 @@ const createBooking = async (req, res) => {
                     paymentStatus,
 
                     paymentMethod: isFreeSession ?
-                        null : paymentMethod || null,
+                        null :
+                        paymentMethod || null,
+
+                    paymentId: isFreeSession ?
+                        null :
+                        paymentId || null,
+
+                    paymentOrderId: isFreeSession ?
+                        null :
+                        paymentOrderId || null,
 
                     amount,
                 }, ], {
@@ -251,6 +446,20 @@ const createBooking = async (req, res) => {
         // -----------------------------
         // Handle known errors
         // -----------------------------
+
+        if (error.message === "CLIENT_INACTIVE") {
+            return res.status(403).json({
+                success: false,
+                message: "This client account is inactive and cannot book sessions",
+            });
+        }
+
+        if (error.message === "MULTIPLE_CLIENTS_SAME_PHONE") {
+            return res.status(409).json({
+                success: false,
+                message: "Multiple client accounts use this phone number. Please use the email associated with your account.",
+            });
+        }
 
         if (
             error.message ===
@@ -308,6 +517,8 @@ const createBooking = async (req, res) => {
                 },
             });
         }
+
+
 
         // -----------------------------
         // MongoDB transaction error
@@ -490,4 +701,5 @@ module.exports = {
     getBookings,
     getBookingById,
     cancelBooking,
+    validateBooking
 };

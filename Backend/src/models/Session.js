@@ -51,7 +51,7 @@ const sessionSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["available", "filled", "unavailable"],
+      enum: ["available", "filled", "unavailable","cancelled"],
       default: "available",
     },
   },

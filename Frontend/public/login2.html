@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Upteamist Studio Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-main': 'var(--bg-main)',
+                        'bg-surface': 'var(--bg-surface)',
+                        'bg-card': 'var(--bg-card)',
+                        'accent-primary': 'var(--accent-primary)',
+                        'accent-hover': 'var(--accent-hover)',
+                        'text-main': 'var(--text-main)',
+                        'text-muted': 'var(--text-muted)',
+                        'border-color': 'var(--border-color)',
+                        'sidebar-bg': 'var(--sidebar-bg)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg-main: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --accent-primary: #2563EB;
+            --accent-hover: #1D4ED8;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --sidebar-bg: #FFFFFF;
+        }
+
+        .dark {
+            --bg-main: #090D16;
+            --bg-surface: #0F172A;
+            --bg-card: #131E33;
+            --accent-primary: #3B82F6; 
+            --accent-hover: #2563EB;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #1E293B;
+            --sidebar-bg: #0B1120;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        .input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            padding: 0.75rem 2.5rem 0.75rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .input-group {
+            position: relative;
+            border-bottom: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group:focus-within {
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .input-group:focus-within i {
+            color: var(--accent-primary);
+        }
+
+        .custom-checkbox {
+            accent-color: var(--accent-primary);
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .slider-text {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+        
+        .slider-text.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dot {
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            opacity: 1;
+            transform: scale(1.35);
+            background-color: white;
+        }
+        
+        #sliderCanvas {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.05);
+            cursor: grab;
+        }
+        #sliderCanvas:active {
+            cursor: grabbing;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="w-full min-h-screen flex flex-col lg:flex-row">
+
+    <!-- LEFT SIDEBAR: Canvas Image Slider Panel -->
+    <div class="hidden lg:flex lg:w-[48%] xl:w-[50%] bg-accent-primary text-white relative flex-col justify-between p-12 overflow-hidden shadow-2xl">
+        
+        <!-- Header / Logo -->
+        <div class="relative z-20 flex items-center gap-3">
+            <div class="w-9 h-9 bg-white flex items-center justify-center text-accent-primary font-bold text-xl rounded-tl-xl rounded-br-xl shadow-lg">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+            </div>
+            <span class="text-2xl font-bold tracking-tight">Upteamist</span>
+        </div>
+
+        <!-- Canvas Container & Texts -->
+        <div class="relative z-10 flex flex-col justify-center my-auto max-w-lg w-full mx-auto">
+            
+            <!-- The HTML5 Canvas Element with Interactive Controls -->
+            <div class="w-full aspect-[16/10] mx-auto rounded-2xl overflow-hidden border border-white/20 relative shadow-2xl group">
+                <canvas id="sliderCanvas" class="w-full h-full block"></canvas>
+                
+                <!-- Navigation Arrows on Canvas Hover -->
+                <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm z-20">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm z-20">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Loading indicator overlay -->
+                <div id="canvasLoader" class="absolute inset-0 flex items-center justify-center bg-accent-primary/80 backdrop-blur-sm z-30 transition-opacity duration-300">
+                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-white"></i>
+                </div>
+            </div>
+
+            <!-- Dynamic Text Container (3 slides) -->
+            <div class="relative h-32 mt-10 w-full">
+                <!-- Text Slide 1 -->
+                <div class="slider-text active" id="text-0">
+                    <h2 class="text-3xl font-bold mb-2.5 tracking-tight">Welcome to Studio</h2>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Get a real enterprise intranet on top of your Office 365 environment, designed for high-performance team operations.
+                    </p>
+                </div>
+                <!-- Text Slide 2 -->
+                <div class="slider-text" id="text-1">
+                    <h2 class="text-3xl font-bold mb-2.5 tracking-tight">Collaborate Better</h2>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Connect with your department in real-time. Share analytics documents, manage tasks, and hit objectives faster.
+                    </p>
+                </div>
+                <!-- Text Slide 3 -->
+                <div class="slider-text" id="text-2">
+                    <h2 class="text-3xl font-bold mb-2.5 tracking-tight">Secure Infrastructure</h2>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Your enterprise data is fully protected with multi-layered encryption protocols natively integrated into your architecture.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Slider Controls (Dots) -->
+            <div class="flex items-center gap-3 mt-4">
+                <button onclick="goToSlide(0)" class="dot active w-2.5 h-2.5 rounded-full bg-white opacity-100 cursor-pointer shadow-sm" aria-label="Slide 1"></button>
+                <button onclick="goToSlide(1)" class="dot w-2.5 h-2.5 rounded-full bg-white opacity-40 hover:opacity-75 cursor-pointer shadow-sm" aria-label="Slide 2"></button>
+                <button onclick="goToSlide(2)" class="dot w-2.5 h-2.5 rounded-full bg-white opacity-40 hover:opacity-75 cursor-pointer shadow-sm" aria-label="Slide 3"></button>
+            </div>
+        </div>
+
+        <!-- Footer copyright inside panel -->
+        <div class="relative z-20 text-xs text-white/60 font-medium">
+            © 2026 Upteamist Enterprise Suite. All rights reserved.
+        </div>
+
+        <!-- Decorative Background Glow Elements -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-white/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-black/15 rounded-full blur-3xl z-0 pointer-events-none"></div>
+    </div>
+
+    <!-- RIGHT CONTENT AREA: Login Form -->
+    <div class="w-full lg:flex-1 flex items-center justify-center bg-bg-surface relative p-8 sm:p-16 animate-fade-in z-20 min-h-screen lg:min-h-0">
+        
+        <!-- Theme Toggle Button -->
+        <button onclick="toggleTheme()" class="absolute top-6 right-8 p-2.5 rounded-xl bg-bg-main border border-border-color text-text-muted hover:text-text-main hover:bg-bg-card transition-all shadow-sm flex items-center justify-center" title="Toggle Theme">
+            <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+
+        <div class="w-full max-w-[420px] animate-slide-up my-auto">
+            
+            <!-- Mobile Logo -->
+            <div class="flex lg:hidden items-center gap-2.5 mb-8">
+                <div class="w-8 h-8 bg-accent-primary flex items-center justify-center text-white font-bold text-xl rounded-tl-xl rounded-br-xl shadow-md">
+                    <i data-lucide="layers" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-text-main">Upteamist</span>
+            </div>
+
+            <!-- Form Headers -->
+            <div class="mb-10">
+                <h1 class="text-4xl font-bold text-accent-primary mb-2 tracking-tight">Log In</h1>
+                <p class="text-xs sm:text-sm text-text-muted font-medium">
+                    Don't have an account? 
+                    <a href="#" class="text-accent-primary hover:underline transition-colors ml-1 font-semibold">Create an account</a>
+                </p>
+                <p class="text-xs text-text-muted/80 mt-1">It will take less than a minute.</p>
+            </div>
+
+            <!-- Login Form -->
+            <form onsubmit="event.preventDefault(); handleLogin();" class="space-y-6">
+                
+                <!-- Username Input -->
+                <div class="input-group pb-1">
+                    <input type="text" id="username" placeholder="Username" class="input-field placeholder:text-text-muted/50 font-medium" required autocomplete="username" />
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group pb-1">
+                    <input type="password" id="password" placeholder="Password" class="input-field placeholder:text-text-muted/50 font-medium" required autocomplete="current-password" />
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                </div>
+
+                <!-- Actions Container -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4">
+                    <button type="submit" class="bg-accent-primary hover:bg-accent-hover text-white px-8 py-3 rounded-xl transition-all shadow-md shadow-accent-primary/25 font-semibold text-xs tracking-wide uppercase">
+                        Sign in
+                    </button>
+                    
+                    <label class="flex items-center gap-2 text-xs text-text-muted cursor-pointer hover:text-text-main transition-colors font-medium">
+                        <input type="checkbox" class="custom-checkbox border-border-color" />
+                        Remember password
+                    </label>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="pt-2">
+                    <a href="#" class="text-xs text-accent-primary hover:underline transition-all font-medium">
+                        Forget your password?
+                    </a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-bg-card border border-border-color px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 text-xs font-semibold text-text-main">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+        <span id="toastMessage">Success</span>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.setAttribute('data-lucide', 'moon');
+            } else {
+                html.classList.add('dark');
+                themeIcon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        // Canvas 3-Image Slider Engine with Smooth Transitions & Swipe support
+        const canvas = document.getElementById('sliderCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const imageUrls = [
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop', // Slide 1: Analytics
+            'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop', // Slide 2: Collaboration
+            'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'  // Slide 3: Security & Infra
+        ];
+        
+        const images = [];
+        let loadedImagesCount = 0;
+
+        let currentSlide = 0;
+        let nextSlideIndex = 0;
+        let isTransitioning = false;
+        let transitionProgress = 0;
+        let slideInterval;
+        let lastTimestamp = 0;
+
+        const TRANSITION_DURATION = 900; // ms
+        const AUTO_SLIDE_DELAY = 6000; // ms
+
+        function resizeCanvas() {
+            if (!canvas || !canvas.parentElement) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            if (loadedImagesCount === imageUrls.length && !isTransitioning) {
+                drawScene(1.0); 
+            }
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+
+        // Preload images
+        imageUrls.forEach((url, index) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                loadedImagesCount++;
+                if (loadedImagesCount === imageUrls.length) {
+                    const loader = document.getElementById('canvasLoader');
+                    if (loader) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => loader.style.display = 'none', 300);
+                    }
+                    resizeCanvas();
+                    resetInterval();
+                    requestAnimationFrame(renderLoop);
+                }
+            };
+            img.src = url;
+            images.push(img);
+        });
+
+        function drawImageCover(ctx, img, x, y, w, h) {
+            const imgRatio = img.width / img.height;
+            const canvasRatio = w / h;
+            let renderW, renderH, renderX, renderY;
+
+            if (imgRatio < canvasRatio) {
+                renderW = w;
+                renderH = w / imgRatio;
+                renderX = x;
+                renderY = y + (h - renderH) / 2;
+            } else {
+                renderW = h * imgRatio;
+                renderH = h;
+                renderX = x + (w - renderW) / 2;
+                renderY = y;
+            }
+            ctx.drawImage(img, renderX, renderY, renderW, renderH);
+        }
+
+        function drawScene(progress) {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (!isTransitioning) {
+                if (images[currentSlide]) {
+                    drawImageCover(ctx, images[currentSlide], 0, 0, width, height);
+                }
+            } else {
+                // Smooth Custom Ease-in-out Cubic Transition
+                const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                const currentXOffset = -width * ease;
+                const nextXOffset = width - (width * ease);
+
+                ctx.save();
+                ctx.globalAlpha = 1 - (ease * 0.2);
+                if (images[currentSlide]) {
+                    drawImageCover(ctx, images[currentSlide], currentXOffset, 0, width, height);
+                }
+                ctx.restore();
+
+                ctx.save();
+                ctx.globalAlpha = 1; 
+                if (images[nextSlideIndex]) {
+                    drawImageCover(ctx, images[nextSlideIndex], nextXOffset, 0, width, height);
+                }
+                ctx.restore();
+            }
+        }
+
+        function renderLoop(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const deltaTime = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            if (isTransitioning) {
+                transitionProgress += deltaTime / TRANSITION_DURATION;
+                
+                if (transitionProgress >= 1.0) {
+                    isTransitioning = false;
+                    transitionProgress = 0;
+                    currentSlide = nextSlideIndex;
+                    drawScene(1.0);
+                } else {
+                    drawScene(transitionProgress);
+                }
+            }
+            requestAnimationFrame(renderLoop);
+        }
+
+        function triggerTransition(targetSlide) {
+            if (isTransitioning || targetSlide === currentSlide) return;
+            nextSlideIndex = targetSlide;
+            isTransitioning = true;
+            transitionProgress = 0;
+            updateDOMIndicators(targetSlide);
+        }
+
+        function updateDOMIndicators(index) {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active', 'opacity-100');
+                    dot.classList.remove('opacity-40');
+                } else {
+                    dot.classList.remove('active', 'opacity-100');
+                    dot.classList.add('opacity-40');
+                }
+            });
+
+            const texts = document.querySelectorAll('.slider-text');
+            texts.forEach((text, i) => {
+                if (i === index) {
+                    text.classList.add('active');
+                } else {
+                    text.classList.remove('active');
+                }
+            });
+        }
+
+        function autoAdvance() {
+            const next = (currentSlide + 1) % images.length;
+            triggerTransition(next);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(autoAdvance, AUTO_SLIDE_DELAY);
+        }
+
+        function goToSlide(index) {
+            triggerTransition(index);
+            resetInterval();
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % images.length;
+            goToSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (currentSlide - 1 + images.length) % images.length;
+            goToSlide(prev);
+        }
+
+        // Swipe support for touch devices on canvas
+        let touchStartX = 0;
+        canvas.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        }, {passive: true});
+
+        canvas.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }, {passive: true});
+
+        function handleLogin() {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = 'Successfully authenticated! Redirecting...';
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

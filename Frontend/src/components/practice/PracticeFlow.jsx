@@ -86,7 +86,7 @@ function PracticeFlow({ onSelectPractice }) {
             CURATED DISCIPLINES
           </span>
 
-          <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
+          <h2 className="text-2xl sm:text-6xl font-display font-extrabold tracking-tight mt-2 leading-tight">
             CHOOSE YOUR FLOW
           </h2>
         </div>

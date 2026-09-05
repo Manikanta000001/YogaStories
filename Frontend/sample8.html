@@ -1,1686 +1,502 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leena Sajja — Energy Flow | Professional Yoga Trainer</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <meta name="supported-color-schemes" content="light" />
+  <title>Your Yoga Session is Confirmed - YogaStories</title>
+  <style type="text/css">
+    /* Resets and Client Fixes */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+    table { border-collapse: collapse !important; }
+    body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #F4F1EA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    
+    /* Responsive styling for modern clients */
+    @media screen and (max-width: 620px) {
+      /* Mobile: let the main email table use the full screen with no outer frame */
+      body { background-color: #FAF8F5 !important; }
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+      .mobile-padding { padding-left: 20px !important; padding-right: 20px !important; }
+      .hero-title { font-size: 26px !important; line-height: 34px !important; }
+      .col-half { display: block !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
+      .mobile-gap { height: 14px !important; }
+      .mobile-stack { display: block !important; width: 100% !important; }
+    }
+    .booking-id { display: inline-block; max-width: 6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- React 18 & Babel CDN -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: ['class', '[data-theme="dark"]'],
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['Syne', 'sans-serif'],
-          },
-          colors: {
-            lightBg: '#F8F6F0',
-            lightCream: '#EFE9DD',
-            lightSage: '#718064',
-            lightTerracotta: '#C97960',
-            lightGold: '#D0A75A',
-            lightCharcoal: '#242521',
-            
-            darkBg: '#080909',
-            darkCharcoal: '#111313',
-            darkForest: '#304133',
-            darkSage: '#829274',
-            darkCoral: '#D97860',
-            darkGold: '#D1AA63',
-            darkWhite: '#F4F1E9',
-          },
-          animation: {
-            'spin-slow': 'spin 25s linear infinite',
-            'spin-reverse-slow': 'spin-reverse 35s linear infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-          },
-          keyframes: {
-            'spin-reverse': {
-              '0%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(-360deg)' },
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-12px)' },
-            },
-            pulseGlow: {
-              '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
-              '50%': { opacity: '0.8', transform: 'scale(1.05)' },
-            }
-          }
+        .booking-id {
+          font-size: 11px !important;
+          line-height: 16px !important;
+          word-break: break-all !important;
+          overflow-wrap: anywhere !important;
         }
-      }
-    }
-  </script>
-
-  <style>
-    :root[data-theme="light"] {
-      --bg-main: #F8F6F0;
-      --bg-surface: #EFE9DD;
-      --accent-sage: #718064;
-      --accent-primary: #C97960;
-      --accent-gold: #D0A75A;
-      --text-main: #242521;
-      --text-muted: #5C5E57;
-      --border-color: rgba(36, 37, 33, 0.12);
-      --orb-glow: rgba(208, 167, 90, 0.35);
-      --glass-bg: rgba(248, 246, 240, 0.75);
-      --card-bg: rgba(239, 233, 221, 0.6);
-    }
-
-    :root[data-theme="dark"] {
-      --bg-main: #080909;
-      --bg-surface: #111313;
-      --accent-sage: #829274;
-      --accent-primary: #D97860;
-      --accent-gold: #D1AA63;
-      --text-main: #F4F1E9;
-      --text-muted: #A3A89E;
-      --border-color: rgba(244, 241, 233, 0.12);
-      --orb-glow: rgba(209, 170, 99, 0.25);
-      --glass-bg: rgba(8, 9, 9, 0.75);
-      --card-bg: rgba(17, 19, 19, 0.6);
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.8s ease;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-
-    /* Universal smooth color & background transitions for seamless mode morphing */
-*,
-*::before,
-*::after {
-  transition:
-    background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-    /* Refined Architectural Arch Frame Styles */
-    .mask-arch-shape {
-      border-radius: 14rem 14rem 2.5rem 2.5rem;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .mask-arch-reverse {
-      border-radius: 2.5rem 2.5rem 14rem 14rem;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-main);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-sage);
-      border-radius: 4px;
-    }
-
-    /* Smooth transition overlay */
-    .theme-transition-orb {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
-      box-shadow: 0 0 100px rgba(208, 167, 90, 0.4);
-      transition: transform 5.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out;
-      will-change: transform, opacity;
-    }
-
-    /* Toggle button spin/pulse keyframe animation */
-    @keyframes coreToggleSpin {
-      0% { transform: rotate(0deg) scale(0.85); }
-      50% { transform: rotate(180deg) scale(1.3); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-
-    .theme-toggle-active {
-      animation: coreToggleSpin 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* Radial glow */
-    .energy-glow {
-      box-shadow: 0 0 60px var(--orb-glow), inset 0 0 30px var(--orb-glow);
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      body {
-        cursor: default;
-      }
-    }
-    .custom-cursor-dot {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 8px;
-      height: 8px;
-      background-color: var(--accent-gold);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      transition: width 0.25s ease, height 0.25s ease, background-color 0.3s ease, transform 0.15s ease-out;
-      will-change: transform;
-    }
-    .custom-cursor-ring {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 38px;
-      height: 38px;
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99998;
-      transform: translate(-50%, -50%);
-      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, transform 0.2s ease-out;
-      will-change: transform;
-    }
-    .custom-cursor-trail {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--orb-glow) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 99997;
-      transform: translate(-50%, -50%);
-      will-change: transform;
-      opacity: 0.7;
-      transition: transform 0.3s ease-out, opacity 0.3s ease;
-    }
-  </style>
+</style>
 </head>
-<body class="font-sans antialiased selection:bg-amber-500/30">
+<body style="margin: 0; padding: 0; background-color: #F4F1EA; color: #2B3A33; -webkit-font-smoothing: antialiased;">
+  <!-- Hidden Preheader text -->
+  <div style="display: none; font-size: 1px; color: #F4F1EA; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Namaste ${client.name}, your ${yogaClass.title} session with {{instructorName}} is confirmed for ${formattedDate}. View full booking details inside.
+    &#847; &zwnj; &nbsp; &#8199; &shy;
+  </div>
 
-  <div id="root"></div>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F4F1EA; min-height: 100vh;">
+    <tr>
+      <td align="center" >
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+        <!-- Container (Max 600px width) -->
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="email-container" style="max-width: 600px; background-color: #FAF8F5; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 58, 51, 0.08); border: 1px solid #EBE5DB;">
 
-    function CustomCursor() {
-      const [position, setPosition] = useState({ x: -100, y: -100 });
-      const [ringPos, setRingPos] = useState({ x: -100, y: -100 });
-      const [trailPos, setTrailPos] = useState({ x: -100, y: -100 });
-      const [isHovered, setIsHovered] = useState(false);
-      const [isClicking, setIsClicking] = useState(false);
-      const [isVisible, setIsVisible] = useState(false);
-
-      const posRef = useRef({ x: -100, y: -100 });
-      const ringRef = useRef({ x: -100, y: -100 });
-      const trailRef = useRef({ x: -100, y: -100 });
-      const requestRef = useRef();
-
-      useEffect(() => {
-        const handleMouseMove = (e) => {
-          posRef.current = { x: e.clientX, y: e.clientY };
-          setPosition({ x: e.clientX, y: e.clientY });
-          if (!isVisible) setIsVisible(true);
-
-          // Detect interactive elements
-          const target = e.target;
-          const isInteractive = target && target.closest('button, a, input, textarea, select, [role="button"], .cursor-pointer');
-          setIsHovered(!!isInteractive);
-        };
-
-        const handleMouseDown = () => setIsClicking(true);
-        const handleMouseUp = () => setIsClicking(false);
-        const handleMouseLeave = () => setIsVisible(false);
-        const handleMouseEnter = () => setIsVisible(true);
-
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mouseup', handleMouseUp);
-        document.addEventListener('mouseleave', handleMouseLeave);
-        document.addEventListener('mouseenter', handleMouseEnter);
-
-        // Smooth physics loop (lerp)
-        const animateCursor = () => {
-          ringRef.current.x += (posRef.current.x - ringRef.current.x) * 0.22;
-          ringRef.current.y += (posRef.current.y - ringRef.current.y) * 0.22;
-          setRingPos({ x: ringRef.current.x, y: ringRef.current.y });
-
-          trailRef.current.x += (posRef.current.x - trailRef.current.x) * 0.08;
-          trailRef.current.y += (posRef.current.y - trailRef.current.y) * 0.08;
-          setTrailPos({ x: trailRef.current.x, y: trailRef.current.y });
-
-          requestRef.current = requestAnimationFrame(animateCursor);
-        };
-
-        requestRef.current = requestAnimationFrame(animateCursor);
-
-        return () => {
-          window.removeEventListener('mousemove', handleMouseMove);
-          window.removeEventListener('mousedown', handleMouseDown);
-          window.removeEventListener('mouseup', handleMouseUp);
-          document.removeEventListener('mouseleave', handleMouseLeave);
-          document.removeEventListener('mouseenter', handleMouseEnter);
-          cancelAnimationFrame(requestRef.current);
-        };
-      }, [isVisible]);
-
-      if (!isVisible) return null;
-
-      return (
-        <React.Fragment>
-          {/* Ambient Glowing Trail */}
-          <div 
-            className="custom-cursor-trail hidden md:block"
-            style={{
-              transform: `translate3d(${trailPos.x}px, ${trailPos.y}px, 0) translate(-50%, -50%) scale(${isHovered ? 1.8 : 1})`,
-            }}
-          />
-          
-          {/* Fluid Ring */}
-          <div 
-            className={`custom-cursor-ring hidden md:block ${isHovered ? 'bg-[var(--accent-gold)]/20 border-[var(--accent-primary)] shadow-lg' : ''}`}
-            style={{
-              transform: `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%) scale(${isClicking ? 0.7 : isHovered ? 1.5 : 1})`,
-            }}
-          />
-
-          {/* Precision Center Dot */}
-          <div 
-            className={`custom-cursor-dot hidden md:block ${isHovered ? 'scale-150 bg-[var(--accent-primary)]' : ''}`}
-            style={{
-              transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%) scale(${isClicking ? 0.4 : 1})`,
-            }}
-          />
-        </React.Fragment>
-      );
-    }
-
-    // --- MAIN APP COMPONENT ---
-    function App() {
-      const [theme, setTheme] = useState('light');
-      const [scrolled, setScrolled] = useState(false);
-      const [isBreathingOpen, setIsBreathingOpen] = useState(false);
-      const [isBookingOpen, setIsBookingOpen] = useState(false);
-      const [selectedPractice, setSelectedPractice] = useState('Personal Yoga');
-      const [isThemeAnimating, setIsThemeAnimating] = useState(false);
-
-      // Parallax mouse position
-      const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-      useEffect(() => {
-        // Load saved theme
-        const savedTheme = localStorage.getItem('energy_theme') || 
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        setTheme(savedTheme);
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        const handleScroll = () => {
-          setScrolled(window.scrollY > 40);
-        };
-
-        const handleMouseMove = (e) => {
-          if (window.innerWidth > 768) {
-            const x = (e.clientX - window.innerWidth / 2) / 40;
-            const y = (e.clientY - window.innerHeight / 2) / 40;
-            setMousePos({ x, y });
-          }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-          window.removeEventListener('scroll', handleScroll);
-          window.removeEventListener('mousemove', handleMouseMove);
-        };
-      }, []);
-
-      // Toggle Theme with Energy Core Animation
-      const toggleTheme = (e) => {
-        if (isThemeAnimating) return;
-        setIsThemeAnimating(true);
-        
-        const nextTheme = theme === 'light' ? 'dark' : 'light';
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = rect.left + rect.width / 2;
-        const y = rect.top + rect.height / 2;
-
-        const overlay = document.createElement('div');
-        overlay.className = 'theme-transition-orb';
-        overlay.style.left = `${x}px`;
-        overlay.style.top = `${y}px`;
-        overlay.style.width = '24px';
-        overlay.style.height = '24px';
-        overlay.style.backgroundColor = nextTheme === 'dark' ? '#080909' : '#F8F6F0';
-        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
-        overlay.style.opacity = '1';
-        document.body.appendChild(overlay);
-
-        requestAnimationFrame(() => {
-          const maxDim = Math.max(window.innerWidth, window.innerHeight) * 3;
-          overlay.style.transform = `translate(-50%, -50%) scale(${maxDim / 10})`;
-        });
-
-        setTimeout(() => {
-          setTheme(nextTheme);
-          document.documentElement.setAttribute('data-theme', nextTheme);
-          localStorage.setItem('energy_theme', nextTheme);
-        }, 350);
-
-        setTimeout(() => {
-          overlay.style.opacity = '0';
-        }, 650);
-
-        setTimeout(() => {
-          overlay.remove();
-          setIsThemeAnimating(false);
-        }, 900);
-      };
-
-      const openBooking = (practiceName = 'Personal Yoga') => {
-        setSelectedPractice(practiceName);
-        setIsBookingOpen(true);
-      };
-
-      return (
-        <div className="relative min-h-screen">
-          {/* ANIMATED CUSTOM MOUSE CURSOR */}
-          <CustomCursor />
-
-          {/* FLOATING NAVBAR PILL */}
-          <Navbar 
-            scrolled={scrolled} 
-            theme={theme} 
-            toggleTheme={toggleTheme} 
-            isThemeAnimating={isThemeAnimating}
-            onOpenBooking={() => openBooking()} 
-            onOpenBreath={() => setIsBreathingOpen(true)}
-          />
-
-          {/* HERO SECTION */}
-          <Hero mousePos={mousePos} onOpenBooking={() => openBooking()} />
-
-          {/* BREATHE SECTION & INTERACTIVE BREATH WIDGET trigger */}
-          <BreatheSection onOpenBreath={() => setIsBreathingOpen(true)} />
-
-          {/* ABOUT LEENA SECTION */}
-          <AboutLeena />
-
-          {/* ACHIEVEMENTS / ENERGY MILESTONES */}
-          <Achievements />
-
-          {/* SILVER MEDAL FEATURE SPOTLIGHT */}
-          <SilverMedalSpotlight />
-
-          {/* PRACTICE SECTION — CHOOSE YOUR FLOW */}
-          <PracticeFlow onSelectPractice={(p) => openBooking(p)} />
-
-          {/* CLASSES & PRICING */}
-          <ClassesSection onOpenBooking={(p) => openBooking(p)} />
-
-          {/* JOURNEY — FLOW LINE */}
-          <JourneyFlow />
-
-          {/* PHILOSOPHY FULLSCREEN */}
-          <Philosophy />
-
-          {/* TESTIMONIALS */}
-          <Testimonials />
-
-          {/* GALLERY — MOMENTS IN MOTION */}
-          <Gallery />
-
-          {/* FINAL CTA */}
-          <FinalCTA onOpenBooking={() => openBooking()} />
-
-          {/* CONTACT & FOOTER */}
-          <ContactAndFooter />
-
-          {/* INTERACTIVE BREATH MODAL */}
-          {isBreathingOpen && (
-            <BreathingModal onClose={() => setIsBreathingOpen(false)} />
-          )}
-
-          {/* BOOKING MODAL (5-STEP) */}
-          {isBookingOpen && (
-            <BookingModal 
-              initialPractice={selectedPractice} 
-              onClose={() => setIsBookingOpen(false)} 
-            />
-          )}
-        </div>
-      );
-    }
-
-    // --- NAVIGATION PILL ---
-    function Navbar({ scrolled, theme, toggleTheme, isThemeAnimating, onOpenBooking, onOpenBreath }) {
-      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-      const navLinks = [
-        { name: 'Home', href: '#hero' },
-        { name: 'About', href: '#about' },
-        { name: 'Achievements', href: '#achievements' },
-        { name: 'Practice', href: '#practice' },
-        { name: 'Journey', href: '#journey' },
-        { name: 'Gallery', href: '#gallery' },
-        { name: 'Contact', href: '#contact' },
-      ];
-
-      return (
-        <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 transition-all duration-500">
-          <nav className={`flex items-center justify-between px-6 py-3 rounded-full transition-all duration-500 max-w-7xl w-full border ${
-            scrolled 
-              ? 'bg-[var(--glass-bg)] backdrop-blur-xl border-[var(--border-color)] shadow-2xl scale-[0.98]' 
-              : 'bg-transparent border-transparent'
-          }`}>
-            {/* BRAND */}
-            <a href="#hero" className="flex items-center gap-2 group">
-
-              <span className="font-display font-extrabold tracking-wider text-sm md:text-base">
-                LEENA SAJJA
-              </span>
-            </a>
-
-            {/* DESKTOP LINKS */}
-            <div className="hidden lg:flex items-center gap-6 text-xs uppercase tracking-widest font-medium opacity-80">
-              {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href}
-                  className="hover:text-[var(--accent-primary)] transition-colors hover:scale-105"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-
-            {/* ACTION & THEME TOGGLE */}
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={onOpenBreath}
-                className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[var(--accent-sage)] text-xs font-medium hover:bg-[var(--accent-sage)] hover:text-white transition-all"
-              >
-                <span className="w-2 h-2 rounded-full bg-[var(--accent-sage)] animate-ping"></span>
-                Breath
-              </button>
-
-              <button 
-                onClick={onOpenBooking}
-                className="px-5 py-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] text-white text-xs font-bold tracking-wider shadow-lg hover:brightness-110 hover:shadow-amber-500/20 active:scale-95 transition-all"
-              >
-                BOOK
-              </button>
-
-              {}
-              {/* ENERGY CORE TOGGLE BUTTON */}
-              <button
-                onClick={toggleTheme}
-                title="Toggle Energy Core Theme"
-                className={`relative w-10 h-10 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:scale-110 active:scale-95 transition-all duration-300 shadow-md ${isThemeAnimating ? 'theme-toggle-active' : ''}`}
-              >
-                <div className="absolute inset-0 rounded-full border border-dashed border-[var(--accent-gold)] animate-spin-slow opacity-60"></div>
-                <span className="text-base font-bold text-[var(--accent-gold)] transition-transform duration-500">
-                  {theme === 'light' ? '✦' : '◐'}
-                </span>
-              </button>
-
-              {/* MOBILE HAMBURGER */}
-              <button 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)]"
-              >
-                <i data-lucide={mobileMenuOpen ? "x" : "menu"} className="w-5 h-5"></i>
-              </button>
-            </div>
-          </nav>
-
-          {/* MOBILE NAV OVERLAY */}
-          {mobileMenuOpen && (
-            <div className="fixed inset-0 top-20 z-40 bg-[var(--bg-main)]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 text-lg font-display uppercase tracking-widest lg:hidden animate-fade-in">
-              {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="hover:text-[var(--accent-primary)] transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <button 
-                onClick={() => { setMobileMenuOpen(false); onOpenBreath(); }}
-                className="px-6 py-2.5 rounded-full border border-[var(--accent-sage)] text-sm"
-              >
-                Take a Breath Widget
-              </button>
-            </div>
-          )}
-        </header>
-      );
-    }
-
-    // --- HERO SECTION ---
-    function Hero({ mousePos, onOpenBooking }) {
-      return (
-        <section id="hero" className="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
-          {/* Animated Background Energy Orb */}
-          <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-tr from-[var(--accent-primary)]/20 via-[var(--accent-gold)]/20 to-[var(--accent-sage)]/20 blur-3xl pointer-events-none animate-pulse-glow"
-            style={{ transform: `translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px)` }}
-          ></div>
-
-          <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
-            {/* Left Column: Heading & Info */}
-            <div 
-              className="lg:col-span-7 space-y-8 text-center lg:text-left"
-              style={{ transform: `translate(${mousePos.x * -0.1}px, ${mousePos.y * -0.1}px)` }}
-            >
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] text-xs font-semibold uppercase tracking-widest">
-                <span className="w-2 h-2 rounded-full bg-[var(--accent-gold)]"></span>
-                LEENA SAJJA — PROFESSIONAL YOGA TRAINER
+          <tr>
+            <td align="center" style="padding: 34px 20px 16px 20px; background-color: #FAF8F5;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" valign="middle">
+                    <!-- Brand Icon: Minimalist Yoga Lotus SVG -->
+                    <img
+  src="https://yogastories.vercel.app/favicon.png"
+  width="34"
+  height="34"
+  alt="YogaStories"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                  </td>
+                  <td valign="middle" style="padding-left: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.8px; color: #2B3A33;">
+                    Yoga<span style="color: #4A7A64;">Stories</span>
+                  </td>
+                </tr>
+              </table>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: #8A978F; margin-top: 4px; font-weight: 500;">
+                Mind &bull; Body &bull; Balance
               </div>
+            </td>
+          </tr>
 
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-display font-extrabold tracking-tight leading-[0.95]">
-                MOVE <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-primary)] via-[var(--accent-gold)] to-[var(--accent-sage)]">
-                  YOUR
-                </span> <br />
-                ENERGY.
+          <tr>
+            <td align="center" class="mobile-padding" style="padding: 16px 36px 4px 36px;">
+              <!-- Status Pill Badge -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 14px;">
+                <tr>
+                  <td style="background-color: #E6EFEA; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #2D5A47; letter-spacing: 0.5px; text-transform: uppercase;">
+                    &#10003;&nbsp; Session Confirmed
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Main Heading -->
+              <h1 class="hero-title" style="margin: 0 0 10px 0; font-size: 28px; line-height: 36px; font-weight: 700; color: #1E2D26; letter-spacing: -0.3px;">
+                Your yoga session is confirmed!
               </h1>
-
-              <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg opacity-80 font-light leading-relaxed">
-                Strength, flexibility, balance, and mindful movement designed to awaken your body and quiet your mind through holistic flow.
+              <p style="margin: 0 auto; max-width: 440px; font-size: 15px; line-height: 23px; color: #5C6B63;">
+                Namaste <strong style="color: #2B3A33;">${client.name}</strong>. Your mat is unrolled and your spot has been reserved. We are excited to support you on your wellness journey.
               </p>
+            </td>
+          </tr>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                <button 
-                  onClick={onOpenBooking}
-                  className="px-8 py-4 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] font-display font-bold text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl"
-                >
-                  START YOUR PRACTICE
-                </button>
-                <a 
-                  href="#about"
-                  className="px-8 py-4 rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] font-display font-bold text-xs uppercase tracking-widest hover:bg-[var(--bg-surface)] transition-all"
-                >
-                  MEET LEENA
-                </a>
+          <tr>
+            <td align="center" style="padding: 18px 20px 0 20px;">
+              <div style="max-width: 480px; margin: 0 auto;">
+                <svg width="100%" height="190" viewBox="0 0 480 190" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block; max-width: 480px;">
+                  <defs>
+                    <linearGradient id="sunGlow" x1="240" y1="20" x2="240" y2="130" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#F2D1B8" stop-opacity="0.9" />
+                      <stop stop-color="#FAF1E6" stop-opacity="0.2" />
+                    </linearGradient>
+                    <linearGradient id="hillGrad1" x1="100" y1="110" x2="100" y2="190" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#D9E6DE" />
+                      <stop stop-color="#C5D9CE" />
+                    </linearGradient>
+                    <linearGradient id="hillGrad2" x1="380" y1="120" x2="380" y2="190" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#E5ECE7" />
+                      <stop stop-color="#D4E3DB" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Rising Morning Wellness Sun -->
+                  <circle cx="240" cy="92" r="54" fill="url(#sunGlow)" />
+                  <!-- Sun rays / ripple halo -->
+                  <circle cx="240" cy="92" r="68" stroke="#EED8C6" stroke-width="1.2" stroke-dasharray="3 4" opacity="0.8" />
+
+                  <!-- Background Dunes & Gentle Hills -->
+                  <path d="M0 160C75 140 145 148 215 158C285 168 360 178 480 148V190H0V160Z" fill="url(#hillGrad1)" opacity="0.65" />
+                  <path d="M0 175C90 160 190 162 270 172C350 182 420 176 480 165V190H0V175Z" fill="url(#hillGrad2)" opacity="0.9" />
+
+                  <!-- Plant fronds / Zen Botanical Flora (Left) -->
+                  <path d="M72 170C65 145 78 128 92 118C85 132 86 148 90 165" stroke="#7BA893" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                  <path d="M76 135C66 126 62 112 66 102C74 110 76 122 76 135Z" fill="#6E9A86" opacity="0.8" />
+                  <path d="M85 125C95 116 106 116 112 122C106 128 96 130 85 125Z" fill="#8BB7A2" opacity="0.85" />
+                  <path d="M70 152C58 148 52 138 54 130C62 134 68 142 70 152Z" fill="#98BEAB" opacity="0.7" />
+
+                  <!-- Plant fronds (Right) -->
+                  <path d="M405 170C412 145 399 128 385 118C392 132 391 148 387 165" stroke="#7BA893" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                  <path d="M401 135C411 126 415 112 411 102C403 110 401 122 401 135Z" fill="#6E9A86" opacity="0.8" />
+                  <path d="M392 125C382 116 371 116 365 122C371 128 381 130 392 125Z" fill="#8BB7A2" opacity="0.85" />
+
+                  <!-- Ground mat shadow -->
+                  <ellipse cx="240" cy="166" rx="55" ry="6.5" fill="#B4C9BE" opacity="0.6" />
+                  <ellipse cx="240" cy="165.5" rx="46" ry="4" fill="#829E90" opacity="0.4" />
+
+                  <!-- Meditating Yogi Figure (Lotus Pose - Dhyanasana) -->
+                  <!-- Head -->
+                  <circle cx="240" cy="98" r="8.5" fill="#365C4B" />
+                  <!-- Torso & neck -->
+                  <path d="M236.5 107.5C238.5 106.8 241.5 106.8 243.5 107.5C248 111.5 251 122 250 134C244 135 236 135 230 134C229 122 232 111.5 236.5 107.5Z" fill="#365C4B" />
+                  <!-- Left arm angled inward to knees in chin mudra -->
+                  <path d="M233 112C226 117 218 126 216 138C222 142 227 143 234 141" stroke="#365C4B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <!-- Right arm angled inward to knees in chin mudra -->
+                  <path d="M247 112C254 117 262 126 264 138C258 142 253 143 246 141" stroke="#365C4B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <!-- Folded crossed legs in Padmasana -->
+                  <path d="M211 146C213 140 221 136 230 139C236 141 244 141 250 139C259 136 267 140 269 146C265 154 252 156 240 156C228 156 215 154 211 146Z" fill="#2E5242" />
+
+                  <!-- Sparkling stars / Prana energy accents -->
+                  <circle cx="178" cy="88" r="2.2" fill="#D3977F" />
+                  <circle cx="304" cy="82" r="2" fill="#D3977F" />
+                  <circle cx="288" cy="62" r="1.6" fill="#7BA893" />
+                  <circle cx="192" cy="66" r="1.6" fill="#7BA893" />
+                </svg>
               </div>
-            </div>
+            </td>
+          </tr>
 
-            {/* Right Column: Hero Photograph with Organic Mask & Energy Ring */}
-            <div className="lg:col-span-5 relative flex items-center justify-center">
-              {/* Architectural Gold Accent Frame Backdrop */}
-              <div 
-                className="absolute w-[295px] h-[375px] sm:w-[375px] sm:h-[475px] mask-arch-shape border-2 border-[var(--accent-gold)]/40 translate-x-3 translate-y-3 pointer-events-none"
-                style={{ transform: `translate(${mousePos.x * 0.2 + 12}px, ${mousePos.y * 0.2 + 12}px)` }}
-              ></div>
+          <tr>
+            <td style="padding: 0; line-height: 0; font-size: 0;">
+              <!-- Fluid Wave SVG divider connecting hero to booking body -->
+              <svg width="100%" height="38" viewBox="0 0 600 38" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                <path d="M0 12C95 28 185 36 295 24C410 12 510 16 600 28V38H0V12Z" fill="#F4EDE4" />
+                <path d="M0 24C120 36 210 32 315 20C420 8 505 14 600 22V38H0V24Z" fill="#EFE8DE" />
+              </svg>
+            </td>
+          </tr>
 
-              {/* Leena Sajja Featured Editorial Image - Elegant Arch Silhouette */}
-              <div 
-                className="relative w-[280px] h-[360px] sm:w-[360px] sm:h-[460px] mask-arch-shape overflow-hidden shadow-2xl border-2 border-[var(--border-color)] bg-[var(--card-bg)] transition-all duration-700 hover:scale-[1.02] energy-glow"
-                style={{ transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)` }}
-              >
-                <img 
-                  src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1000&q=80" 
-                  alt="Leena Sajja Yoga Trainer" 
-                  className="w-full h-full object-cover object-center scale-105 hover:scale-110 transition-transform duration-1000"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                <div className="absolute bottom-6 left-6 right-6 text-white text-xs tracking-wider font-light">
-                  <p className="font-bold text-sm tracking-widest uppercase">CULT TRAINER & MEDALIST</p>
-                  <p className="opacity-80">National Level Competitor</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
+          <tr>
+            <td class="mobile-padding" style="padding: 24px 36px 16px 36px; background-color: #EFE8DE;">
+              <!-- Outer Card Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; border-radius: 18px; border: 1px solid #E3D9CC; box-shadow: 0 4px 16px rgba(43, 58, 51, 0.05); overflow: hidden;">
+                
+                <!-- Card Header -->
+                <tr>
+                  <td style="background-color: #365C4B; padding: 18px 24px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td align="left" valign="middle">
+                          <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.8px; color: #B3D1C2; font-weight: 600; display: block;">Session Reservation</span>
+                          <span style="font-size: 18px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.2px;">${yogaClass.title}</span>
+                        </td>
+                        <td align="right" valign="middle">
+                          <!-- Payment Status Tag -->
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="background-color: rgba(255,255,255,0.18);  border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #FFFFFF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                &#9679;&nbsp;${booking.paymentStatus}
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
 
-    // --- BREATHE INTRO & INTERACTIVE WIDGET SECTION ---
-    function BreatheSection({ onOpenBreath }) {
-      return (
-        <section className="py-24 px-6 relative flex flex-col items-center justify-center text-center overflow-hidden border-y border-[var(--border-color)] bg-[var(--card-bg)]">
-          <div className="absolute w-96 h-96 rounded-full border border-[var(--accent-gold)]/20 animate-ping opacity-30 pointer-events-none"></div>
-          
-          <div className="max-w-3xl z-10 space-y-6">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-sage)] font-semibold">
-              MINDFUL MOMENT
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight">
-              BREATHE. MOVE. BE PRESENT.
-            </h2>
-            <p className="text-base sm:text-lg opacity-80 max-w-xl mx-auto font-light">
-              Before exploring further, take a conscious pause to anchor your focus in the present moment.
-            </p>
-
-            <button 
-              onClick={onOpenBreath}
-              className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-[var(--accent-sage)] text-white font-display text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-emerald-900/10"
-            >
-              <i data-lucide="wind" className="w-4 h-4"></i>
-              TAKE A BREATH NOW
-            </button>
-          </div>
-        </section>
-      );
-    }
-
-    // --- INTERACTIVE BREATHING MODAL ---
-    function BreathingModal({ onClose }) {
-      const [phase, setPhase] = useState('INHALE'); // INHALE, HOLD, EXHALE
-      const [counter, setCounter] = useState(4);
-
-      useEffect(() => {
-        const timer = setInterval(() => {
-          setCounter((prev) => {
-            if (prev === 1) {
-              if (phase === 'INHALE') { setPhase('HOLD'); return 4; }
-              if (phase === 'HOLD') { setPhase('EXHALE'); return 4; }
-              if (phase === 'EXHALE') { setPhase('INHALE'); return 4; }
-            }
-            return prev - 1;
-          });
-        }, 1000);
-
-        return () => clearInterval(timer);
-      }, [phase]);
-
-      return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-2xl p-6 animate-fade-in">
-          <div className="relative max-w-md w-full bg-[var(--bg-surface)] p-10 rounded-3xl border border-[var(--border-color)] text-center shadow-2xl flex flex-col items-center">
-            <button 
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-main)]"
-            >
-              <i data-lucide="x" className="w-5 h-5"></i>
-            </button>
-
-            <span className="text-xs uppercase tracking-widest text-[var(--accent-gold)] font-bold mb-6">
-              GUIDED BREATHING
-            </span>
-
-            {/* Pulsing Orb Circle */}
-            <div className="relative w-52 h-52 my-6 flex items-center justify-center">
-              <div className={`absolute inset-0 rounded-full bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-gold)] opacity-30 transition-all duration-[1000ms] ${
-                phase === 'INHALE' ? 'scale-110 shadow-2xl' : phase === 'HOLD' ? 'scale-105' : 'scale-75 opacity-20'
-              }`}></div>
-              <div className="w-40 h-40 rounded-full border-2 border-dashed border-[var(--accent-gold)] animate-spin-slow absolute"></div>
-              
-              <div className="z-10 text-center">
-                <p className="text-2xl font-display font-extrabold tracking-widest">{phase}</p>
-                <p className="text-4xl font-bold text-[var(--accent-primary)] mt-1">{counter}</p>
-              </div>
-            </div>
-
-            <p className="text-xs opacity-75 max-w-xs mt-2">
-              Follow the expanding and contracting flow. Reset your nervous system.
-            </p>
-
-            <button 
-              onClick={onClose}
-              className="mt-8 px-6 py-2.5 rounded-full border border-[var(--border-color)] text-xs uppercase tracking-wider font-semibold hover:bg-[var(--bg-main)] transition-all"
-            >
-              Exit Breathing
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    // --- ABOUT LEENA SECTION ---
-    function AboutLeena() {
-      return (
-        <section id="about" className="py-28 px-6 relative max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Image & Floating Credentials */}
-            <div className="lg:col-span-6 relative flex items-center justify-center">
-              {/* Architectural Accent Offset Frame */}
-              <div className="absolute w-[315px] h-[395px] sm:w-[395px] sm:h-[495px] mask-arch-shape border-2 border-[var(--accent-sage)]/30 -translate-x-3 -translate-y-3 pointer-events-none"></div>
-
-              <div className="w-[300px] h-[380px] sm:w-[380px] sm:h-[480px] mask-arch-shape overflow-hidden shadow-2xl border-2 border-[var(--border-color)] bg-[var(--card-bg)]">
-                <img 
-                  src="leena.jpeg" 
-                  alt="Leena Sajja Yoga Pose" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Floating Badge 1 */}
-              <div className="absolute -top-4 -left-2 sm:left-4 p-4 rounded-full bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--border-color)] shadow-xl flex items-center gap-3 animate-float">
-                <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center font-bold text-lg">
-                  🥈
-                </div>
-                <div className="text-xs font-semibold">
-                  <p className="text-[var(--accent-gold)]">NATIONAL LEVEL</p>
-                  <p className="opacity-80">Silver Medalist</p>
-                </div>
-              </div>
-
-              {/* Floating Badge 2 */}
-              <div className="absolute -bottom-6 -right-2 sm:right-4 p-4 rounded-full bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--border-color)] shadow-xl flex items-center gap-3 animate-float" style={{ animationDelay: '2s' }}>
-                <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center font-bold text-xs">
-                <img src="images.jpeg" className="object-fit rounded-full" alt=""/>
-                </div>
-                <div className="text-xs font-semibold">
-                  <p className="text-[var(--accent-sage)]">OFFICIAL TRAINER</p>
-                  <p className="opacity-80">Cult Fitness</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Biography Details */}
-            <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-primary)] font-semibold">
-                BIOGRAPHY
-              </span>
-              <h2 className="text-4xl sm:text-5xl font-display font-extrabold tracking-tight">
-                MEET LEENA SAJJA.
-              </h2>
-              
-              <p className="text-base sm:text-lg opacity-80 leading-relaxed font-light">
-                Leena Sajja is a distinguished national-level yoga competitor, medalist, and professional yoga trainer currently guiding practices at Cult. Her philosophy bridges time-tested athletic discipline with modern mindful wellness.
-              </p>
-
-              <div className="space-y-4 pt-4 border-t border-[var(--border-color)]">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[var(--accent-sage)]/20 text-[var(--accent-sage)] flex items-center justify-center shrink-0 mt-1">
-                    ✓
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Professional Yoga Trainer at Cult</h4>
-                    <p className="text-xs opacity-75 mt-0.5">Empowering hundreds of daily practitioners toward optimal physical stability and focus.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[var(--accent-gold)]/20 text-[var(--accent-gold)] flex items-center justify-center shrink-0 mt-1">
-                    🥈
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm uppercase tracking-wider">National-Level Silver Medalist</h4>
-                    <p className="text-xs opacity-75 mt-0.5">Recognized for technical excellence, grace, and flexibility in competitive yoga.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] flex items-center justify-center shrink-0 mt-1">
-                    ★
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Multiple Competition Honours</h4>
-                    <p className="text-xs opacity-75 mt-0.5">Consistent top rankings in regional and national yoga championships.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-      );
-    }
-
-    // --- ACHIEVEMENTS RADIAL ORBIT ---
-    function Achievements() {
-      const [activeItem, setActiveItem] = useState(0);
-
-      const milestones = [
-        {
-          title: "National Silver Medal",
-          subtitle: "NATIONAL CHAMPIONSHIP",
-          desc: "Awarded silver in competitive artistic yoga demonstration for precision and flexibility.",
-          icon: "🥈"
-        },
-        {
-          title: "Cult Yoga Trainer",
-          subtitle: "PROFESSIONAL FACULTY",
-          desc: "Leading high-energy and restorative yoga sessions across top fitness centers.",
-          icon: "✦"
-        },
-        {
-          title: "National Competitor",
-          subtitle: "ATHLETIC EXCELLENCE",
-          desc: "Represented state in multiple prestigious national-level yoga tournaments.",
-          icon: "🏆"
-        },
-        {
-          title: "Multiple State Awards",
-          subtitle: "CONSISTENT DISTINCTION",
-          desc: "Honored with multiple trophies for artistic form, balance, and endurance.",
-          icon: "🎖️"
-        }
-      ];
-
-      return (
-        <section id="achievements" className="py-28 px-6 bg-[var(--bg-surface)] relative overflow-hidden">
-          <div className="max-w-7xl mx-auto text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-gold)] font-semibold">
-              ENERGY MILESTONES
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
-              ACHIEVEMENTS IN MOTION
-            </h2>
-          </div>
-
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            {/* Interactive Selector List */}
-            <div className="md:col-span-6 space-y-4">
-              {milestones.map((item, idx) => (
-                <div 
-                  key={idx}
-                  onClick={() => setActiveItem(idx)}
-                  className={`p-6 rounded-3xl border transition-all cursor-pointer flex items-center justify-between ${
-                    activeItem === idx 
-                      ? 'bg-[var(--bg-main)] border-[var(--accent-gold)] shadow-xl scale-[1.02]' 
-                      : 'border-[var(--border-color)] opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">{item.icon}</span>
-                    <div className="text-left">
-                      <p className="text-xs uppercase tracking-widest text-[var(--accent-gold)] font-bold">{item.subtitle}</p>
-                      <h3 className="font-display font-bold text-lg">{item.title}</h3>
-                    </div>
-                  </div>
-                  <div className={`w-3 h-3 rounded-full ${activeItem === idx ? 'bg-[var(--accent-gold)] animate-ping' : 'bg-transparent border border-current'}`}></div>
-                </div>
-              ))}
-            </div>
-
-            {/* Central Orbital Display */}
-            <div className="md:col-span-6 flex flex-col items-center justify-center text-center p-8 rounded-full border-2 border-dashed border-[var(--accent-gold)]/40 relative aspect-square max-w-sm mx-auto shadow-2xl bg-[var(--bg-main)]">
-              <div className="absolute inset-2 rounded-full border border-[var(--border-color)] animate-spin-reverse-slow"></div>
-              
-              <div className="text-5xl mb-4 animate-bounce">
-                {milestones[activeItem].icon}
-              </div>
-              <h3 className="font-display font-bold text-2xl max-w-xs">
-                {milestones[activeItem].title}
-              </h3>
-              <p className="text-xs uppercase tracking-widest text-[var(--accent-gold)] font-bold mt-1">
-                {milestones[activeItem].subtitle}
-              </p>
-              <p className="text-xs opacity-75 max-w-xs mt-3 leading-relaxed">
-                {milestones[activeItem].desc}
-              </p>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // --- SILVER MEDAL FEATURE SPOTLIGHT ---
-    function SilverMedalSpotlight() {
-      return (
-        <section className="py-24 px-6 relative overflow-hidden bg-[var(--bg-main)]">
-          <div className="max-w-6xl mx-auto rounded-3xl border border-[var(--border-color)] bg-gradient-to-r from-[var(--bg-surface)] via-[var(--card-bg)] to-[var(--bg-surface)] p-8 sm:p-16 relative overflow-hidden shadow-2xl">
-            <div className="absolute -right-16 -bottom-16 w-80 h-80 rounded-full border-4 border-dashed border-[var(--accent-gold)]/20 animate-spin-slow pointer-events-none"></div>
-
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center z-10 relative">
-              <div className="md:col-span-4 flex justify-center">
-                <div className="relative w-48 h-48 sm:w-60 sm:h-60 rounded-full border-4 border-[var(--accent-gold)] flex items-center justify-center p-2 energy-glow bg-[var(--bg-main)]">
-                  <div className="text-center">
-                    <span className="text-5xl">🥈</span>
-                    <p className="font-display font-extrabold text-sm sm:text-base tracking-widest mt-2">NATIONAL</p>
-                    <p className="text-xs text-[var(--accent-gold)] font-bold uppercase">Silver Medalist</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-8 space-y-4 text-center md:text-left">
-                <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-gold)] font-bold">
-                  NATIONAL RECOGNITION
-                </span>
-                <h3 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight">
-                  A MILESTONE BUILT THROUGH DISCIPLINE.
-                </h3>
-                <p className="text-sm sm:text-base opacity-80 font-light leading-relaxed">
-                  Securing silver at the National Level stands as a testament to years of unwavering practice, breath regulation, and refined athletic performance.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // --- PRACTICE SECTION — CHOOSE YOUR FLOW ---
-    function PracticeFlow({ onSelectPractice }) {
-      const [activePractice, setActivePractice] = useState(0);
-
-      const practices = [
-        { name: "Personal Yoga", desc: "Tailored 1-on-1 energy alignment designed specifically around your body goals.", img: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80" },
-        { name: "Beginner Flow", desc: "Gentle introductory posture setup and fundamental breathwork.", img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80" },
-        { name: "Flexibility Focus", desc: "Deep fascia stretching techniques to lengthen muscles and enhance mobility.", img: "https://images.unsplash.com/photo-1510894347250-93c407d5815d?auto=format&fit=crop&w=800&q=80" },
-        { name: "Strength & Balance", desc: "Core stability, inverted poses, and isometric muscular endurance.", img: "https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80" },
-        { name: "Mindfulness", desc: "Pranayama breathing control and quiet restorative meditation.", img: "https://images.unsplash.com/photo-1508215885820-4585e56135c8?auto=format&fit=crop&w=800&q=80" },
-        { name: "Online Sessions", desc: "Live virtual training with real-time posture adjustments anywhere in the world.", img: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" }
-      ];
-
-      return (
-        <section id="practice" className="py-28 px-6 bg-[var(--bg-surface)] relative">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-primary)] font-semibold">
-                CURATED DISCIPLINES
-              </span>
-              <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
-                CHOOSE YOUR FLOW
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              {/* Circular Radial Option Menu */}
-              <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {practices.map((item, idx) => (
-                  <button
-                    key={item.name}
-                    onClick={() => setActivePractice(idx)}
-                    className={`p-6 rounded-2xl border text-left transition-all ${
-                      activePractice === idx 
-                        ? 'bg-[var(--bg-main)] border-[var(--accent-primary)] shadow-xl scale-105' 
-                        : 'bg-[var(--card-bg)] border-[var(--border-color)] opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <span className="text-xs font-bold text-[var(--accent-primary)] uppercase tracking-wider">0{idx + 1}</span>
-                    <h3 className="font-display font-bold text-lg mt-1">{item.name}</h3>
-                    <p className="text-xs opacity-75 mt-2 line-clamp-2">{item.desc}</p>
-                  </button>
-                ))}
-              </div>
-
-              {/* Dynamic Floating Image & Action */}
-              <div className="lg:col-span-6 flex flex-col items-center">
-                <div className="relative w-full h-[400px] sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl border-2 border-[var(--border-color)] group">
-                  <img 
-                    src={practices[activePractice].img} 
-                    alt={practices[activePractice].name}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
-                    <span className="text-xs font-bold tracking-widest text-[var(--accent-gold)] uppercase">SELECTED PRACTICE</span>
-                    <h3 className="text-3xl font-display font-bold mt-1">{practices[activePractice].name}</h3>
-                    <p className="text-sm opacity-80 mt-2 max-w-md font-light">{practices[activePractice].desc}</p>
+                <!-- Card Key-Value Grid -->
+                <tr>
+                  <td style="padding: 22px 24px 8px 24px;">
                     
-                    <button 
-                      onClick={() => onSelectPractice(practices[activePractice].name)}
-                      className="mt-6 self-start px-6 py-3 rounded-full bg-[var(--accent-primary)] text-white text-xs font-bold uppercase tracking-wider hover:brightness-110 transition-all shadow-lg"
-                    >
-                      BOOK THIS FLOW →
-                    </button>
-                  </div>
-                </div>
-              </div>
+                    <!-- Row 1: Date & Time -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 14px;">
+                      <tr>
+                        <!-- Date Block -->
+                        <td width="48%" class="col-half" valign="top" style="background-color: #F8F6F2; border-radius: 12px; padding: 12px 14px; border: 1px solid #EFEAE0;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td width="28" valign="top">
+                                <!-- Calendar SVG -->
+                             <img
+  src="https://img.icons8.com/material-outlined/48/4A7A64/calendar.png"
+  width="22"
+  height="22"
+  alt="Date"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                              </td>
+                              <td valign="top" style="padding-left: 8px;">
+                                <div style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.5px;">Date</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #1E2D26; margin-top: 2px;">${formattedDate}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
 
-            </div>
-          </div>
-        </section>
-      );
-    }
+                        <td width="4%" class="col-half mobile-gap" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
 
-    // --- CLASSES EXPERIENCE & PRICING ---
-    function ClassesSection({ onOpenBooking }) {
-      const classesList = [
-        { id: '01', title: 'PERSONAL YOGA', duration: '60 MIN', desc: 'Customized 1-on-1 session targeted to individual mobility goals and posture refining.' },
-        { id: '02', title: 'GROUP YOGA', duration: '60 MIN', desc: 'High-energy small group sessions cultivating shared breath and collective movement.' },
-        { id: '03', title: 'ONLINE VIRTUAL YOGA', duration: '45 MIN', desc: 'Interactive live guidance from the comfort of your home with tailored adjustments.' }
-      ];
+                        <!-- Time Block -->
+                        <td width="48%" class="col-half" valign="top" style="background-color: #F8F6F2; border-radius: 12px; padding: 12px 14px; border: 1px solid #EFEAE0;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td width="28" valign="top">
+                                <!-- Clock SVG -->
+                              <img
+  src="https://img.icons8.com/material-outlined/48/4A7A64/clock.png"
+  width="22"
+  height="22"
+  alt="Time"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                              </td>
+                              <td valign="top" style="padding-left: 8px;">
+                                <div style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.5px;">Time</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #1E2D26; margin-top: 2px;">${session.startTime} &ndash; ${session.endTime}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
 
-      return (
-        <section className="py-28 px-6 max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-sage)] font-semibold">
-              TRAINING FORMATS
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
-              SESSION EXPERIENCES
-            </h2>
-          </div>
+                    <!-- Row 2: Instructor & Customer -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 14px;">
+                      <tr>
+                        <!-- Instructor Block -->
+                        <td width="48%" class="col-half" valign="top" style="background-color: #F8F6F2; border-radius: 12px; padding: 12px 14px; border: 1px solid #EFEAE0;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td width="28" valign="top">
+                                <!-- Teacher/User SVG -->
+            <img
+  src="https://img.icons8.com/material-outlined/48/4A7A64/user.png"
+  width="22"
+  height="22"
+  alt="Instructor"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                              </td>
+                              <td valign="top" style="padding-left: 8px;">
+                                <div style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.5px;">Instructor</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #1E2D26; margin-top: 2px;">Leena Sajja</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
 
-          <div className="space-y-6">
-            {classesList.map((cls) => (
-              <div 
-                key={cls.id}
-                className="p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--bg-surface)] transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:shadow-2xl"
-              >
-                <div className="flex items-start md:items-center gap-6">
-                  <span className="text-3xl font-display font-extrabold opacity-40 group-hover:text-[var(--accent-primary)] group-hover:opacity-100 transition-all">
-                    {cls.id}
-                  </span>
-                  <div>
-                    <h3 className="text-2xl font-display font-bold">{cls.title}</h3>
-                    <p className="text-xs opacity-75 max-w-md mt-1">{cls.desc}</p>
-                  </div>
-                </div>
+                        <td width="4%" class="col-half mobile-gap" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
 
-                <div className="flex items-center gap-6 self-end md:self-center">
-                  <span className="px-4 py-1.5 rounded-full border border-[var(--border-color)] text-xs font-semibold">
-                    {cls.duration}
-                  </span>
-                  <button 
-                    onClick={() => onOpenBooking(cls.title)}
-                    className="px-6 py-3 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all"
-                  >
-                    BOOK →
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      );
-    }
+                        <!-- Customer Block -->
+                        <td width="48%" class="col-half" valign="top" style="background-color: #F8F6F2; border-radius: 12px; padding: 12px 14px; border: 1px solid #EFEAE0;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                              <td width="28" valign="top">
+                                <!-- Lotus icon -->
+<img
+  src="https://yogastories.vercel.app/favicon.png"
+  width="22"
+  height="22"
+  alt="Practitioner"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                              </td>
+                              <td valign="top" style="padding-left: 8px;">
+                                <div style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.5px;">Practitioner</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #1E2D26; margin-top: 2px;">${client.name}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
 
-    // --- JOURNEY — FLOW LINE ---
-    function JourneyFlow() {
-      const journeySteps = [
-        { label: "BEGIN", text: "First steps onto the yoga mat discovering breath work." },
-        { label: "TRAIN", text: "Years of rigorous physical discipline and posture mastering." },
-        { label: "COMPETE", text: "Entering competitive artistic yoga arenas." },
-        { label: "NATIONAL", text: "Representing state at the highest national level championships." },
-        { label: "SILVER", text: "Awarded National Silver Medal for athletic distinction." },
-        { label: "TEACH", text: "Empowering students daily at Cult & private sessions." }
-      ];
+                    <!-- Divider within card -->
+                    <div style="border-top: 1px dashed #DCD4C7; margin: 4px 0 14px 0;"></div>
 
-      return (
-        <section id="journey" className="py-28 px-6 bg-[var(--bg-surface)] relative overflow-hidden">
-          <div className="max-w-7xl mx-auto text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-gold)] font-semibold">
-              THE PATHWAY
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
-              JOURNEY FLOW
-            </h2>
-          </div>
+                    <!-- Row 3: Booking ID & Amount Paid -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td align="left" valign="middle">
+                          <span style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.6px; display: block;">Booking Reference</span>
+                          <span class="booking-id" style="font-size: 13px; font-family: 'SF Mono', Consolas, Monaco, monospace; color: #365C4B; font-weight: 600;">#${booking._id}</span>
+                        </td>
+                        <td align="right" valign="middle">
+                          <span style="font-size: 11px; text-transform: uppercase; color: #7B8A82; font-weight: 600; letter-spacing: 0.6px; display: block;">Total Paid</span>
+                          <span style="font-size: 18px; font-weight: 800; color: #23382D;">₹${booking.amount}</span>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div className="max-w-4xl mx-auto relative">
-            {/* Dynamic Connecting Line */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)] via-[var(--accent-gold)] to-[var(--accent-sage)] -translate-x-1/2"></div>
+                  </td>
+                </tr>
 
-            <div className="space-y-12">
-              {journeySteps.map((step, idx) => (
-                <div 
-                  key={idx}
-                  className={`flex items-center gap-8 ${idx % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} text-center md:text-left`}
-                >
-                  <div className={`w-1/2 ${idx % 2 === 0 ? 'text-right' : 'text-left'}`}>
-                    <span className="text-xs font-bold text-[var(--accent-gold)] tracking-widest uppercase">STEP 0{idx + 1}</span>
-                    <h3 className="font-display font-extrabold text-2xl mt-1">{step.label}</h3>
-                    <p className="text-xs opacity-75 max-w-xs mt-1 inline-block">{step.text}</p>
-                  </div>
-
-                  <div className="relative z-10 w-8 h-8 rounded-full bg-[var(--bg-main)] border-2 border-[var(--accent-gold)] flex items-center justify-center shrink-0 shadow-lg">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent-gold)] animate-pulse"></div>
-                  </div>
-
-                  <div className="w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // --- PHILOSOPHY FULLSCREEN ---
-    function Philosophy() {
-      return (
-        <section className="min-h-screen py-24 px-6 flex items-center justify-center relative overflow-hidden bg-[var(--bg-main)] border-y border-[var(--border-color)]">
-          {/* Subtle Ambient Background Image */}
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <img 
-              src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80" 
-              alt="Yoga Philosophy" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="max-w-4xl text-center z-10 space-y-8">
-            <span className="text-xs uppercase tracking-[0.4em] text-[var(--accent-primary)] font-bold">
-              THE PHILOSOPHY
-            </span>
-
-            <h2 className="text-5xl sm:text-7xl md:text-8xl font-display font-extrabold tracking-tight leading-none">
-              STRENGTH IS NOT ALWAYS LOUD.
-            </h2>
-
-            <p className="text-xl sm:text-3xl font-light italic opacity-90 max-w-2xl mx-auto">
-              "Sometimes, strength is simply showing up on the mat and taking the next deep breath."
-            </p>
-
-            <p className="text-xs uppercase tracking-widest text-[var(--accent-gold)] font-bold">
-              — LEENA SAJJA
-            </p>
-          </div>
-        </section>
-      );
-    }
-
-    // --- TESTIMONIALS ---
-    function Testimonials() {
-      const quotes = [
-        { text: "Training with Leena transformed my mobility and mental clarity completely. Her national-level expertise shows in every posture detail.", author: "Ananya Sharma", role: "Daily Cult Member" },
-        { text: "Her focus on breath regulation and core balance helped me overcome chronic lower back strain within just weeks.", author: "Rohan Verma", role: "Personal Client" },
-        { text: "Leena combines intense athletic strength with deep calming energy. Easily the best trainer experience I've had.", author: "Priya Nair", role: "Online Flow Student" }
-      ];
-
-      const [current, setCurrent] = useState(0);
-
-      return (
-        <section className="py-28 px-6 bg-[var(--bg-surface)] relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-sage)] font-semibold">
-              VOICES OF FLOW
-            </span>
-
-            <div className="relative my-12 p-8 sm:p-16 rounded-3xl bg-[var(--bg-main)] border border-[var(--border-color)] shadow-2xl">
-              <span className="text-6xl font-display text-[var(--accent-gold)] opacity-40 leading-none">“</span>
-              <p className="text-lg sm:text-2xl font-light leading-relaxed my-4">
-                {quotes[current].text}
-              </p>
-              <div className="mt-6">
-                <h4 className="font-display font-bold text-lg">{quotes[current].author}</h4>
-                <p className="text-xs text-[var(--accent-gold)] font-semibold uppercase">{quotes[current].role}</p>
-              </div>
-
-              {/* Navigation dots */}
-              <div className="flex justify-center gap-3 mt-8">
-                {quotes.map((_, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => setCurrent(idx)}
-                    className={`w-3 h-3 rounded-full transition-all ${current === idx ? 'bg-[var(--accent-gold)] w-8' : 'bg-[var(--border-color)]'}`}
-                  ></button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // --- GALLERY — MOMENTS IN MOTION ---
-    function Gallery() {
-      const [filter, setFilter] = useState('ALL');
-      const [lightboxImg, setLightboxImg] = useState(null);
-
-      const items = [
-        { cat: 'PRACTICE', img: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80', title: 'Flow State' },
-        { cat: 'COMPETITIONS', img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', title: 'Artistic Yoga Podium' },
-        { cat: 'TRAINING', img: 'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80', title: 'Cult Fitness Studio' },
-        { cat: 'AWARDS', img: 'https://images.unsplash.com/photo-1510894347250-93c407d5815d?auto=format&fit=crop&w=800&q=80', title: 'Silver Medal Ceremony' },
-        { cat: 'STUDENTS', img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', title: 'Group Energy Session' },
-        { cat: 'PRACTICE', img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?auto=format&fit=crop&w=800&q=80', title: 'Mindful Breathing' }
-      ];
-
-      const filtered = filter === 'ALL' ? items : items.filter(i => i.cat === filter);
-
-      return (
-        <section id="gallery" className="py-28 px-6 max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-primary)] font-semibold">
-              VISUAL JOURNAL
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight mt-2">
-              MOMENTS IN MOTION
-            </h2>
-
-            {/* Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-3 mt-8">
-              {['ALL', 'PRACTICE', 'COMPETITIONS', 'TRAINING', 'AWARDS', 'STUDENTS'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setFilter(tab)}
-                  className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-                    filter === tab 
-                      ? 'bg-[var(--accent-primary)] text-white shadow-lg' 
-                      : 'bg-[var(--card-bg)] border border-[var(--border-color)] opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Grid Layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((item, idx) => (
-              <div 
-                key={idx}
-                onClick={() => setLightboxImg(item.img)}
-                className="relative h-80 rounded-3xl overflow-hidden cursor-pointer group shadow-xl border border-[var(--border-color)]"
-              >
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6 text-white">
-                  <span className="text-xs font-bold text-[var(--accent-gold)] uppercase tracking-widest">{item.cat}</span>
-                  <h4 className="font-display font-bold text-lg">{item.title}</h4>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Lightbox Modal */}
-          {lightboxImg && (
-            <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-6" onClick={() => setLightboxImg(null)}>
-              <img src={lightboxImg} className="max-w-4xl max-h-[85vh] rounded-2xl object-contain shadow-2xl" />
-            </div>
-          )}
-        </section>
-      );
-    }
-
-    // --- FINAL CTA SECTION ---
-    function FinalCTA({ onOpenBooking }) {
-      return (
-        <section className="py-28 px-6 text-center relative overflow-hidden bg-[var(--bg-surface)] border-t border-[var(--border-color)]">
-          <div className="max-w-3xl mx-auto space-y-6 z-10 relative">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-gold)] font-bold">
-              START YOUR TRANSFORMATION
-            </span>
-            <h2 className="text-5xl sm:text-7xl font-display font-extrabold tracking-tight">
-              WHERE DOES YOUR FLOW BEGIN?
-            </h2>
-            <p className="text-base sm:text-lg opacity-80 max-w-xl mx-auto font-light">
-              Step onto the mat with a national medalist. Book your personalized private or online practice session today.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-              <button 
-                onClick={onOpenBooking}
-                className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] text-white font-display font-bold text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-2xl"
-              >
-                BOOK A SESSION NOW →
-              </button>
-              <a 
-                href="https://wa.me/" target="_blank" rel="noreferrer"
-                className="px-8 py-4 rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] font-display font-bold text-xs uppercase tracking-widest hover:bg-[var(--bg-main)] transition-all"
-              >
-                WHATSAPP LEENA
-              </a>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    // --- CONTACT AND FOOTER ---
-    function ContactAndFooter() {
-      return (
-        <footer id="contact" className="bg-[var(--bg-main)] border-t border-[var(--border-color)] pt-20 pb-12 px-6">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
+                <!-- CTA Action row inside card container -->
             
-            {/* Contact Details */}
-            <div className="lg:col-span-5 space-y-6">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--accent-primary)] font-bold">
-                CONNECT DIRECTLY
-              </span>
-              <h3 className="text-3xl font-display font-extrabold">LEENA SAJJA</h3>
-              <p className="text-sm opacity-80 max-w-sm">
-                Professional Yoga Trainer at Cult & National Silver Medalist. Available for 1-on-1 private sessions, corporate workshops, and online classes.
-              </p>
 
-              <div className="space-y-3 text-sm opacity-90 pt-2">
-                <p className="flex items-center gap-3">
-                  <span className="text-[var(--accent-gold)]">📍</span> Cult Center / Private Studio
-                </p>
-                <p className="flex items-center gap-3">
-                  <span className="text-[var(--accent-gold)]">📧</span> leena.sajja.yoga@gmail.com
-                </p>
-                <p className="flex items-center gap-3">
-                  <span className="text-[var(--accent-gold)]">📱</span> +91 98765 43210
-                </p>
-              </div>
-            </div>
+              </table>
+            </td>
+          </tr>
 
-            {/* Quick Contact Form */}
-            <div className="lg:col-span-7 bg-[var(--card-bg)] p-8 rounded-3xl border border-[var(--border-color)] shadow-xl">
-              <h4 className="font-display font-bold text-xl mb-6">SEND A DIRECT MESSAGE</h4>
-              <form onSubmit={(e) => { e.preventDefault(); alert('Thank you! Leena will respond shortly.'); }} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input type="text" placeholder="Your Name" required className="w-full px-5 py-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-sm focus:outline-none focus:border-[var(--accent-gold)]" />
-                  <input type="email" placeholder="Your Email" required className="w-full px-5 py-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-sm focus:outline-none focus:border-[var(--accent-gold)]" />
-                </div>
-                <input type="tel" placeholder="Phone Number" className="w-full px-5 py-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-sm focus:outline-none focus:border-[var(--accent-gold)]" />
-                <textarea rows="3" placeholder="Tell Leena about your practice goals..." required className="w-full px-5 py-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-sm focus:outline-none focus:border-[var(--accent-gold)]"></textarea>
-                <button type="submit" className="w-full py-3.5 rounded-2xl bg-[var(--text-main)] text-[var(--bg-main)] font-display font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all">
-                  SEND MESSAGE
-                </button>
-              </form>
-            </div>
+          <tr>
+            <td style="padding: 0; line-height: 0; font-size: 0; background-color: #EFE8DE;">
+              <svg width="100%" height="32" viewBox="0 0 600 32" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                <path d="M0 0C120 18 240 26 360 16C460 7 540 12 600 24V32H0V0Z" fill="#FAF8F5" />
+              </svg>
+            </td>
+          </tr>
 
-          </div>
-
-          <div className="max-w-7xl mx-auto pt-8 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between text-xs opacity-60 gap-4">
-            <p>© 2026 LEENA SAJJA. ALL RIGHTS RESERVED.</p>
-            <p>YOGA • MOVEMENT • WELLNESS</p>
-          </div>
-        </footer>
-      );
-    }
-
-    // --- 5-STEP BOOKING MODAL ---
-    function BookingModal({ initialPractice, onClose }) {
-      const [step, setStep] = useState(1);
-      const [sessionType, setSessionType] = useState('paid'); // 'free' or 'paid'
-      const [formData, setFormData] = useState({
-        practice: initialPractice || 'Personal Yoga',
-        date: '2026-08-25',
-        time: '',
-        name: '',
-        email: '',
-        phone: '',
-        paymentMethod: 'card'
-      });
-      const [isSuccess, setIsSuccess] = useState(false);
-      const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-
-      // Mock slots with status: 'available', 'filled', 'unavailable'
-      const timeSlots = [
-        { time: '07:00 AM', status: 'available', type: 'regular', price: '$45' },
-        { time: '08:30 AM', status: 'filled', type: 'regular', price: '$45' },
-        { time: '10:00 AM', status: 'available', type: 'free', price: 'FREE' },
-        { time: '04:00 PM', status: 'available', type: 'free', price: 'FREE' },
-        { time: '05:30 PM', status: 'filled', type: 'regular', price: '$45' }
-      ];
-
-      const handleNext = () => setStep((s) => Math.min(s + 1, 5));
-      const handleBack = () => setStep((s) => Math.max(s - 1, 1));
-
-      const handleConfirm = () => {
-        if (sessionType === 'paid') {
-          setIsProcessingPayment(true);
-          setTimeout(() => {
-            setIsProcessingPayment(false);
-            setIsSuccess(true);
-          }, 1500);
-        } else {
-          setIsSuccess(true);
-        }
-      };
-
-      return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xl p-4 sm:p-6 animate-fade-in">
-          <div className="relative max-w-2xl w-full bg-[var(--bg-surface)] p-6 sm:p-10 rounded-3xl border border-[var(--border-color)] shadow-2xl overflow-hidden">
-            <button 
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-main)]"
-            >
-              ✕
-            </button>
-
-            {!isSuccess ? (
-              <div>
-                {/* Progress Bar Header */}
-                <div className="mb-5 text-center">
-                  <span className="text-xs uppercase tracking-widest text-[var(--accent-gold)] font-bold">
-                    STEP 0{step} OF 05 — {sessionType === 'free' ? 'FREE SESSION' : 'PAID SESSION'}
-                  </span>
-                  <div className="w-full h-1.5 bg-[var(--border-color)] rounded-full mt-2 overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] transition-all duration-500"
-                      style={{ width: `${(step / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* Step 1: Practice Selection */}
-                {step === 1 && (
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-display font-bold text-center">Select Your Practice Flow</h3>
-                    
-                    {['Personal Yoga', 'Beginner Flow', 'Flexibility Focus', 'Strength & Balance', 'Online Virtual Yoga'].map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => setFormData({ ...formData, practice: p })}
-                        className={`w-full p-3 rounded-2xl border text-left font-bold text-xs sm:text-sm transition-all ${
-                          formData.practice === p 
-                            ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-lg' 
-                            : 'bg-[var(--bg-main)] border-[var(--border-color)]'
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Step 2: Date Selection */}
-                {step === 2 && (
-                  <div className="space-y-4 text-center py-4">
-                    <h3 className="text-lg font-display font-bold">Choose Session Date</h3>
-                    <input 
-                      type="date" 
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full p-3.5 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-center font-bold text-base"
-                    />
-                    <p className="text-xs opacity-70">Slots are updated live for {formData.date}</p>
-                  </div>
-                )}
-
-                {/* Step 3: Interactive Slot Selector with Color Legend */}
-                {step === 3 && (
-                  <div className="space-y-3">
-                    <div className="text-center">
-                      <h3 className="text-lg font-display font-bold">Select Available Slot</h3>
-                      <p className="text-[11px] opacity-75 mt-0.5">Choose an open slot below.</p>
-                    </div>
-
-                    {/* Color Legend */}
-                    <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] font-semibold py-1">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Available
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Filled Out
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60"></span> Unavailable
-                      </div>
-                    </div>
-
-                    {/* Slots List */}
-                    <div className="space-y-2">
-                      {timeSlots.map((slot, i) => {
-                        const isSelectable = slot.status === 'available' && (sessionType === 'paid' || slot.type === 'free');
-                        return (
-                          <div 
-                            key={i}
-                            onClick={() => {
-                              if (isSelectable) {
-                                setFormData({ 
-                                  ...formData, 
-                                  time: slot.time,
-                                  sessionType: slot.type === 'free' ? 'free' : 'paid'
-                                });
-                                setSessionType(slot.type === 'free' ? 'free' : 'paid');
-                              }
-                            }}
-                            className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all ${
-                              formData.time === slot.time 
-                                ? 'border-[var(--accent-gold)] bg-[var(--accent-gold)]/10 ring-2 ring-[var(--accent-gold)]' 
-                                : slot.status === 'available'
-                                ? 'border-[var(--border-color)] bg-[var(--bg-main)] cursor-pointer hover:border-emerald-500'
-                                : slot.status === 'filled'
-                                ? 'border-amber-500/40 bg-amber-500/5 opacity-75 cursor-not-allowed'
-                                : 'border-rose-500/30 bg-rose-500/5 opacity-50 cursor-not-allowed'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2.5">
-                              <span className={`w-2.5 h-2.5 rounded-full ${
-                                slot.status === 'available' ? 'bg-emerald-500' : slot.status === 'filled' ? 'bg-amber-500' : 'bg-rose-500'
-                              }`}></span>
-                              <div>
-                                <p className="font-display font-bold text-xs sm:text-sm">{slot.time}</p>
-                                <p className="text-[10px] opacity-70">
-                                  {slot.status === 'available' ? (slot.type === 'free' ? 'Free Session Slot' : 'Regular Paid Slot') : slot.status === 'filled' ? 'Slot Filled Out (Sold)' : 'Slot Unavailable'}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)]">
-                                {slot.price}
-                              </span>
-                              {formData.time === slot.time && (
-                                <p className="text-[9px] text-[var(--accent-gold)] font-bold mt-0.5 uppercase">Selected</p>
-                              )}
-                            </div>
+          <tr>
+            <td class="mobile-padding" style="padding: 12px 36px 28px 36px; background-color: #FAF8F5;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-bottom: 16px;">
+                    <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #9A7B66; font-weight: 700; display: block;">Preparing For Your Practice</span>
+                    <h3 style="margin: 4px 0 0 0; font-size: 18px; color: #1E2D26; font-weight: 700;">Arrive Centered &amp; Ready</h3>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- 3 Mindful Steps / Tips -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <!-- Tip 1 -->
+                      <tr>
+                        <td width="42" valign="top" style="padding: 8px 0;">
+                          <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #EBF3EF; text-align: center; line-height: 32px; color: #365C4B; font-weight: 700; font-size: 13px;">
+                            1
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                        </td>
+                        <td valign="top" style="padding: 8px 0 14px 6px;">
+                          <div style="font-size: 14px; font-weight: 700; color: #2B3A33;">Arrive 5–10 minutes early</div>
+                          <div style="font-size: 13px; color: #64736C; line-height: 19px; margin-top: 2px;">Take a moment to disconnect from screens, settle into your mat, and calm your breath.</div>
+                        </td>
+                      </tr>
+                      <!-- Tip 2 -->
+                      <tr>
+                        <td width="42" valign="top" style="padding: 8px 0;">
+                          <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #F8EFE9; text-align: center; line-height: 32px; color: #C28D75; font-weight: 700; font-size: 13px;">
+                            2
+                          </div>
+                        </td>
+                        <td valign="top" style="padding: 8px 0 14px 6px;">
+                          <div style="font-size: 14px; font-weight: 700; color: #2B3A33;">Wear comfortable layers</div>
+                          <div style="font-size: 13px; color: #64736C; line-height: 19px; margin-top: 2px;">Wear breathable apparel and keep a water bottle and a warm layer nearby for Savasana.</div>
+                        </td>
+                      </tr>
+                      <!-- Tip 3 -->
+                      <tr>
+                        <td width="42" valign="top" style="padding: 8px 0;">
+                          <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #EBF3EF; text-align: center; line-height: 32px; color: #365C4B; font-weight: 700; font-size: 13px;">
+                            3
+                          </div>
+                        </td>
+                        <td valign="top" style="padding: 8px 0 8px 6px;">
+                          <div style="font-size: 14px; font-weight: 700; color: #2B3A33;">Honor your body</div>
+                          <div style="font-size: 13px; color: #64736C; line-height: 19px; margin-top: 2px;">Yoga is a personal exploration, not a competition. Listen to your body and rest whenever needed.</div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-                {/* Step 4: User Details */}
-                {step === 4 && (
-                  <div className="space-y-3 py-2">
-                    <h3 className="text-lg font-display font-bold text-center">Practitioner Details</h3>
-                    <input 
-                      type="text" 
-                      placeholder="Full Name" 
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full p-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-xs sm:text-sm focus:outline-none focus:border-[var(--accent-gold)]"
-                    />
-                    <input 
-                      type="email" 
-                      placeholder="Email Address" 
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full p-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-xs sm:text-sm focus:outline-none focus:border-[var(--accent-gold)]"
-                    />
-                    <input 
-                      type="tel" 
-                      placeholder="Phone Number" 
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full p-3 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-xs sm:text-sm focus:outline-none focus:border-[var(--accent-gold)]"
-                    />
-                  </div>
-                )}
+          <tr>
+            <td style="padding: 0; line-height: 0; font-size: 0; background-color: #FAF8F5;">
+              <svg width="100%" height="42" viewBox="0 0 600 42" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                <path d="M0 18C140 34 260 12 390 28C470 38 540 24 600 14V42H0V18Z" fill="#20332B" />
+              </svg>
+            </td>
+          </tr>
 
-                {/* Step 5: Final Review & Payment */}
-                {step === 5 && (
-                  <div className="space-y-3 py-1">
-                    <h3 className="text-lg font-display font-bold text-center">Review & Final Confirmation</h3>
-                    <div className="p-4 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] text-left space-y-1.5 text-xs sm:text-sm">
-                      <p><span className="opacity-60">Flow Type:</span> <strong>{formData.practice}</strong> ({sessionType === 'free' ? 'Free Session' : 'Paid Session'})</p>
-                      <p><span className="opacity-60">Date & Slot:</span> <strong>{formData.date} at {formData.time || '10:00 AM'}</strong></p>
-                      <p><span className="opacity-60">Name:</span> <strong>{formData.name || 'Practitioner'}</strong></p>
-                      <p><span className="opacity-60">Amount:</span> <strong className="text-[var(--accent-gold)]">{sessionType === 'free' ? 'FREE ($0)' : '$45.00'}</strong></p>
-                    </div>
+          <tr>
+            <td class="mobile-padding" style="background-color: #20332B; padding: 20px 36px 36px 36px; text-align: center;">
+              
+              <!-- Footer YogaStories logo and tagline -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 16px auto;">
+                <tr>
+                  <td align="center" valign="middle">
+<img
+  src="https://yogastories.vercel.app/favicon.png"
+  width="24"
+  height="24"
+  alt="YogaStories"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                  </td>
+                  <td valign="middle" style="padding-left: 8px; font-size: 18px; font-weight: 700; color: #FAF8F5; letter-spacing: 0.5px;">
+                    Yoga<span style="color: #8EB7A3;">Stories</span>
+                  </td>
+                </tr>
+              </table>
 
-                    {sessionType === 'paid' && (
-                      <div className="p-3 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-2">
-                        <p className="text-[11px] font-bold uppercase tracking-wider">Select Payment Method</p>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <label className="flex items-center gap-2 p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] cursor-pointer">
-                            <input type="radio" name="pay" defaultChecked /> Card
-                          </label>
-                          <label className="flex items-center gap-2 p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] cursor-pointer">
-                            <input type="radio" name="pay" /> UPI / Wallet
-                          </label>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+              <!-- Social Media SVG Icons -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto 20px auto;">
+                <tr>
+                  <!-- Instagram -->
+                  <td style="padding: 0 8px;">
+                    <a href="https://yogapt.example.com" target="_blank" style="text-decoration: none; display: inline-block;">
+<img
+  src="https://img.icons8.com/material-outlined/48/E2EBE5/instagram.png"
+  width="30"
+  height="30"
+  alt="Instagram"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                    </a>
+                  </td>
+                  <!-- Facebook -->
+                  <td style="padding: 0 8px;">
+                    <a href="https://yogapt.example.com" target="_blank" style="text-decoration: none; display: inline-block;">
+<img
+  src="https://img.icons8.com/material-outlined/48/E2EBE5/facebook.png"
+  width="30"
+  height="30"
+  alt="Facebook"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                    </a>
+                  </td>
+                  <!-- Youtube / Video Classes -->
+                  <td style="padding: 0 8px;">
+                    <a href="https://yogapt.example.com" target="_blank" style="text-decoration: none; display: inline-block;">
+<img
+  src="https://img.icons8.com/material-outlined/48/E2EBE5/youtube.png"
+  width="30"
+  height="30"
+  alt="YouTube"
+  style="display:block; border:0; outline:none; text-decoration:none;"
+/>
+                    </a>
+                  </td>
+                </tr>
+              </table>
 
-                {/* Footer Controls */}
-                <div className="flex justify-between mt-6 pt-3 border-t border-[var(--border-color)]">
-                  {step > 1 ? (
-                    <button onClick={handleBack} className="px-5 py-2 rounded-full border border-[var(--border-color)] text-xs font-bold uppercase">
-                      BACK
-                    </button>
-                  ) : <div></div>}
-                  {step < 5 ? (
-                    <button 
-                      onClick={handleNext} 
-                      disabled={step === 3 && !formData.time}
-                      className={`px-7 py-2 rounded-full bg-[var(--accent-primary)] text-white text-xs font-bold uppercase tracking-wider ${step === 3 && !formData.time ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'}`}
-                    >
-                      NEXT STEP →
-                    </button>
-                  ) : (
-                    <button 
-                      onClick={handleConfirm} 
-                      disabled={isProcessingPayment}
-                      className="px-7 py-2.5 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-gold)] text-white text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
-                    >
-                      {isProcessingPayment ? 'Processing...' : sessionType === 'free' ? 'Submit Free Booking' : 'Complete Payment'}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-6 space-y-4 animate-fade-in">
-                <div className={`w-16 h-16 rounded-full text-3xl flex items-center justify-center mx-auto animate-bounce ${
-                  sessionType === 'free' ? 'bg-amber-500/20 text-amber-600' : 'bg-emerald-500/20 text-emerald-600'
-                }`}>
-                  {sessionType === 'free' ? '⏳' : '✓'}
-                </div>
-                
-                <h3 className="text-2xl font-display font-extrabold">
-                  {sessionType === 'free' ? 'REQUEST SUBMITTED.' : 'PAYMENT SUCCESSFUL!'}
-                </h3>
-                
-                <p className="text-xs sm:text-sm opacity-80 max-w-sm mx-auto leading-relaxed">
-                  {sessionType === 'free' 
-                    ? 'We will inform you when the booking is confirmed.' 
-                    : 'Your booking is confirmed, ready for your slot. See you on the mat with Leena!'}
-                </p>
+              <!-- Footer Navigation Links -->
+              <p style="margin: 0 0 14px 0; font-size: 13px; color: #9FB5A9; line-height: 20px;">
+                <a href="{{bookingUrl}}" style="color: #D6E3DC; text-decoration: none; font-weight: 500;">Manage Booking</a>
+                &nbsp;&bull;&nbsp;
+                <a href="https://yogapt.example.com/classes" style="color: #D6E3DC; text-decoration: none; font-weight: 500;">Class Schedule</a>
+                &nbsp;&bull;&nbsp;
+                <a href="https://yogapt.example.com/help" style="color: #D6E3DC; text-decoration: none; font-weight: 500;">Support</a>
+              </p>
 
-                <button onClick={onClose} className="px-7 py-2.5 rounded-full bg-[var(--text-main)] text-[var(--bg-main)] text-xs font-bold uppercase tracking-wider hover:opacity-90">
-                  CLOSE EXPERIENCE
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
+              <!-- Footer Legal / Unsubscribe Note -->
+              <p style="margin: 0; font-size: 11px; color: #738C7F; line-height: 18px;">
+                You received this email because you booked a class on YogaStories.<br/>
+                &copy; 2026 YogaStories Inc. All rights reserved. Peace, wellness, and mindful practice.
+              </p>
 
-    // Render App
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+            </td>
+          </tr>
 
-    // Initialize Lucide Icons
-    setTimeout(() => {
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }, 500);
-  </script>
+        </table>
+        <!-- End Container -->
+
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
+      
